@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/home/components/music_container.dart';
+import 'package:musicplayer/screens/home/components/songs_list.dart';
+import 'package:provider/provider.dart';
 
 class HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final songs = Provider.of<Songs>(context).songs;
     final size = MediaQuery.of(context).size;
     return Container(
       height: size.height,
@@ -13,18 +17,18 @@ class HomeBody extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Container(
-            height: 150,
-            width: double.infinity,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                MusicContainer(),
-                MusicContainer(),
-                MusicContainer(),
-                MusicContainer(),
-              ],
-            ),
-          ),
+              height: 200,
+              width: double.infinity,
+              child: ListView.builder(
+                itemCount: songs.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return ChangeNotifierProvider.value(
+                    value: songs[index],
+                    child: SongsList(),
+                  );
+                },
+              )),
           Container(
             alignment: Alignment.center,
             height: 50,
