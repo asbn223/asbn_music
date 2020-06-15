@@ -1,10 +1,14 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
-import 'package:musicplayer/screens/play_queue/play_queue_screen.dart';
+import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
+    return true;
+  });
   runApp(MyApp());
 }
 
@@ -18,12 +22,12 @@ class MyApp extends StatelessWidget {
         title: "Music Player",
         theme: ThemeData(
           primaryColor: Color(0xFF341F97),
-          accentColor: Color(0xFFF1F2F6),
+          accentColor: Color(0xFFFAB1A0),
         ),
         home: HomeScreen(),
         routes: {
           HomeScreen.routeName: (context) => HomeScreen(),
-          PlayQueueScreen.routeName: (context) => PlayQueueScreen(),
+          NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
         },
       ),
     );

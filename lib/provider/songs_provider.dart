@@ -31,7 +31,7 @@ class Songs with ChangeNotifier {
           ),
         );
         id++;
-        imgId = rng.nextInt(5) + 1;
+        imgId = rng.nextInt(6) + 1;
       });
       _songs = _gotSongs;
       notifyListeners();
