@@ -1,14 +1,31 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:clay_containers/widgets/clay_containers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
-import 'package:musicplayer/screens/now_playing/components/Clay_Button.dart';
+import 'package:musicplayer/screens/now_playing/components/clay_button.dart';
 import 'package:provider/provider.dart';
 
-class TopContainerBody extends StatelessWidget {
+class TopContainerBody extends StatefulWidget {
   final bool isOpened;
 
   TopContainerBody({this.isOpened});
+
+  @override
+  _TopContainerBodyState createState() => _TopContainerBodyState();
+}
+
+class _TopContainerBodyState extends State<TopContainerBody> {
+  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
+  bool isPlaying = true;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _assetsAudioPlayer.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -17,7 +34,7 @@ class TopContainerBody extends StatelessWidget {
     final song = songs.firstWhere((music) => music.id == songId);
     return Stack(
       children: <Widget>[
-        isOpened
+        widget.isOpened
             ? Text('')
             : Positioned(
                 bottom: 140,
@@ -36,26 +53,63 @@ class TopContainerBody extends StatelessWidget {
                   ),
                 ),
               ),
+        Positioned(
+          bottom: 35,
+          left: 35,
+          child: ClayButton(
+            icon: Icons.skip_previous,
+            onPressed: null,
+            color: Color(0xFF4B4B4B),
+            iconColor: Color(0xFFFFFFFF),
+          ),
+        ),
+        Positioned(
+          bottom: 35,
+          right: 35,
+          child: ClayButton(
+            icon: Icons.skip_next,
+            onPressed: null,
+            color: Color(0xFF4B4B4B),
+            iconColor: Color(0xFFFFFFFF),
+          ),
+        ),
+        widget.isOpened
+            ? Text('')
+            : Positioned(
+                bottom: 35,
+                left: size.width / 2 - 25,
+                child: ClayButton(
+                  icon: Icons.play_arrow,
+                  onPressed: null,
+                  color: Color(0xFF4B4B4B),
+                  iconColor: Color(0xFFFFFFFF),
+                ),
+              ),
         AnimatedPositioned(
           duration: Duration(milliseconds: 750),
-          top: isOpened ? 55 : 100,
-          left: isOpened ? 95 : 45,
+          top: widget.isOpened ? 55 : 100,
+          left: widget.isOpened ? 95 : 45,
           child: AnimatedContainer(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(isOpened ? 100 : 150),
+              borderRadius: BorderRadius.circular(widget.isOpened ? 100 : 150),
             ),
             duration: Duration(milliseconds: 750),
-            width: isOpened ? size.width / 2 : size.width / 2 + 100,
-            height: isOpened ? size.height / 3.25 : size.height / 3.25 + 100,
+            width: widget.isOpened ? size.width / 2 : size.width / 2 + 100,
+            height:
+                widget.isOpened ? size.height / 3.25 : size.height / 3.25 + 100,
             child: ClayContainer(
               depth: 50,
-              borderRadius: isOpened ? 100 : 150,
+              borderRadius: widget.isOpened ? 100 : 150,
               emboss: true,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(isOpened ? 100 : 150),
-                child: Image.asset(
-                  song.imgFile,
-                  fit: BoxFit.cover,
+                borderRadius:
+                    BorderRadius.circular(widget.isOpened ? 100 : 150),
+                child: GestureDetector(
+                  onTap: widget.isOpened ? () => print("sabin") : null,
+                  child: Image.asset(
+                    song.imgFile,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -63,37 +117,28 @@ class TopContainerBody extends StatelessWidget {
         ),
         AnimatedPositioned(
           left: 10,
-          top: isOpened ? 115 : 15,
+          top: widget.isOpened ? 115 : 15,
           curve: Curves.easeInOut,
           duration: Duration(milliseconds: 750),
           child: ClayButton(
             icon: Icons.favorite_border,
-            onPressed: isOpened ? null : null,
+            onPressed: widget.isOpened ? null : null,
+            color: Color(0xFFFFBE76),
+            iconColor: Color(0xFFFFFFFF),
           ),
         ),
         AnimatedPositioned(
           right: 10,
-          top: isOpened ? 115 : 15,
+          top: widget.isOpened ? 115 : 15,
           curve: Curves.easeInOut,
           duration: Duration(milliseconds: 750),
           child: ClayButton(
             icon: Icons.playlist_add,
-            onPressed: isOpened ? null : null,
+            onPressed: widget.isOpened ? null : null,
+            color: Color(0xFFFF7979),
+            iconColor: Color(0xFFFFFFFF),
           ),
         ),
-
-//        Positioned(
-//          right: 10,
-//          top: 15,
-//          child: ClayButton(
-//            icon: Icons.menu,
-//            onPressed: () {
-//              setState(() {
-//                isPlaylistOpened = !isPlaylistOpened;
-//              });
-//            },
-//          ),
-//        ),
       ],
     );
   }

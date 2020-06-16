@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicplayer/screens/now_playing/components/Clay_Button.dart';
+import 'package:musicplayer/screens/now_playing/components/clay_button.dart';
 import 'package:musicplayer/screens/now_playing/components/top_container_body.dart';
 
 class NowPlayingBody extends StatefulWidget {
@@ -22,7 +22,7 @@ class _NowPlayingBodyState extends State<NowPlayingBody> {
           AnimatedContainer(
             width: double.infinity,
             height: isPlaylistOpened ? size.height / 2 : size.height,
-            color: Colors.green,
+//            color: Colors.green,
             duration: Duration(milliseconds: 750),
             curve: Curves.easeInOut,
             child: TopContainerBody(
