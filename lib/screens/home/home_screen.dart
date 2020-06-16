@@ -1,6 +1,7 @@
 import 'package:floating_menu/floating_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/components/home_body.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 
@@ -46,7 +47,7 @@ class HomeScreen extends StatelessWidget {
             icon: Icons.audiotrack,
             size: Size(45, 45),
             onPress: () {
-              print("Audio");
+              Navigator.of(context).pushNamed(AllSongsScreen.routeName);
             },
           ),
           FloatingButtonModel(

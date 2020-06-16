@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/screens/now_playing/components/bottom_container_body.dart';
 import 'package:musicplayer/screens/now_playing/components/clay_button.dart';
 import 'package:musicplayer/screens/now_playing/components/top_container_body.dart';
 
@@ -34,9 +35,9 @@ class _NowPlayingBodyState extends State<NowPlayingBody> {
             child: AnimatedContainer(
               width: double.infinity,
               height: isPlaylistOpened ? size.height / 2 : 0,
-              color: Colors.purpleAccent,
               duration: Duration(milliseconds: 750),
               curve: Curves.easeInOut,
+              child: BottomContainerBody(),
             ),
           ),
           Positioned(

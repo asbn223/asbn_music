@@ -8,14 +8,6 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  bool isHomeSelected = true;
-
-  bool isPlaylistsSelected = false;
-
-  bool isSongsSelected = false;
-
-  bool isSettingSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -27,67 +19,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
         CustomDrawerItems(
           title: "Home",
           imageUrl: 'assets/icons/home.png',
-          onTap: isHomeSelected
-              ? null
-              : () {
-                  Navigator.pushNamed(context, HomeScreen.routeName);
-                  setState(() {
-                    isHomeSelected = true;
-                    isPlaylistsSelected = false;
-                    isSongsSelected = false;
-                    isSettingSelected = false;
-                  });
-                },
+          onTap: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
         ),
         CustomDrawerItems(
-          title: "Playlists",
-          icon: Icons.playlist_play,
-          color: Colors.blue,
-          onTap: isPlaylistsSelected
-              ? null
-              : () {
-                  setState(() {
-                    isHomeSelected = false;
-                    isPlaylistsSelected = true;
-                    isSongsSelected = false;
-                    isSettingSelected = false;
-                  });
-                },
-        ),
+            title: "Playlists",
+            icon: Icons.playlist_play,
+            color: Colors.blue,
+            onTap: null,),
         CustomDrawerItems(
-          title: "Songs",
-          icon: Icons.music_note,
-          color: Colors.amber,
-          onTap: isSongsSelected
-              ? null
-              : () {
-                  setState(() {
-                    isHomeSelected = false;
-                    isPlaylistsSelected = false;
-                    isSongsSelected = true;
-                    isSettingSelected = false;
-                  });
-                },
-        ),
+            title: "Songs",
+            icon: Icons.music_note,
+            color: Colors.amber,
+            onTap: null,),
         Divider(
           color: Color(0xFF808080),
           thickness: 1.5,
         ),
         CustomDrawerItems(
-          title: "Settings",
-          icon: Icons.settings,
-          color: Colors.lightBlue,
-          onTap: isSettingSelected
-              ? null
-              : () {
-                  setState(() {
-                    isHomeSelected = false;
-                    isPlaylistsSelected = false;
-                    isSongsSelected = false;
-                    isSettingSelected = true;
-                  });
-                },
-        ),
+            title: "Settings",
+            icon: Icons.settings,
+            color: Colors.lightBlue,
+            onTap: null,),
         CustomDrawerItems(
           title: "Log Out",
           icon: Icons.exit_to_app,

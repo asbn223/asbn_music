@@ -20,7 +20,7 @@ class _HomeBodyState extends State<HomeBody> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Songs>(context).getSongs().then((_) {
+      Provider.of<Songs>(context, listen: false).getSongs().then((_) {
         setState(() {
           _isLoading = false;
         });
