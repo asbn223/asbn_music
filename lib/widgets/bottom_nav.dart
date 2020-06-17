@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/helper/player_helper.dart';
 
 class BottomNav extends StatelessWidget {
   @override
@@ -25,7 +26,7 @@ class BottomNav extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.play_arrow),
-                  onPressed: () {},
+                  onPressed: PlayerHelper.playPauseSong,
                 ),
                 IconButton(
                   icon: Icon(Icons.skip_next),

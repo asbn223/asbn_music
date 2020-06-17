@@ -9,6 +9,10 @@ class AllSongsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('All Songs'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       drawer: Drawer(
         child: CustomDrawer(),

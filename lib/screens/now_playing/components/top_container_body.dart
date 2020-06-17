@@ -1,7 +1,7 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:clay_containers/widgets/clay_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/helper/player_helper.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/components/clay_button.dart';
 import 'package:provider/provider.dart';
@@ -16,15 +16,6 @@ class TopContainerBody extends StatefulWidget {
 }
 
 class _TopContainerBodyState extends State<TopContainerBody> {
-  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
-  bool isPlaying = true;
-
-  @override
-  void dispose() {
-    super.dispose();
-    _assetsAudioPlayer.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -79,7 +70,7 @@ class _TopContainerBodyState extends State<TopContainerBody> {
                 left: size.width / 2 - 25,
                 child: ClayButton(
                   icon: Icons.play_arrow,
-                  onPressed: null,
+                  onPressed: PlayerHelper.playPauseSong,
                   color: Color(0xFF4B4B4B),
                   iconColor: Color(0xFFFFFFFF),
                 ),

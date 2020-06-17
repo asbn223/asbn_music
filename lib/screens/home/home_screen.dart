@@ -6,6 +6,8 @@ import 'package:musicplayer/screens/home/components/home_body.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
+//  final AssetsAudioPlayer _assetsAudioPlayer;
+//  HomeScreen(this._assetsAudioPlayer);
   static String routeName = '/home_screen';
 
   @override
@@ -23,7 +25,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-
       body: SafeArea(
         child: HomeBody(),
       ),
@@ -43,7 +44,7 @@ class HomeScreen extends StatelessWidget {
             locationDistance: 70,
             shape: BoxShape.circle,
             color: Colors.deepOrange,
-            label: "Audio",
+            label: "See All",
             icon: Icons.audiotrack,
             size: Size(45, 45),
             onPress: () {

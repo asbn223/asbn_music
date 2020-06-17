@@ -39,45 +39,4 @@ class Songs with ChangeNotifier {
       throw (error);
     }
   }
-
-//  Future<void> fetchSong() async {
-//    String audioPath = "";
-//    List<Song> _gotSongs = [];
-//    try {
-//      audioPath = await StoragePath.audioPath;
-//      var response = jsonDecode(audioPath);
-//      for (int i = 0; i < 1; i++) {
-////        print(response[i]['files'][0]);
-//        int noOfSongs = response[i]['files'].length;
-////        print(noOfSongs);
-//        for (int j = 0; j < 1; j++) {
-////          print(response[i]['files'][j]);
-//          Map<String, dynamic> songs = response[i]['files'][j];
-//          String displayName = songs['displayName'].toString().replaceAll(
-//                songs['displayName'].toString().toLowerCase().contains(".mp3")
-//                    ? ".mp3"
-//                    : songs['displayName']
-//                            .toString()
-//                            .toLowerCase()
-//                            .contains(".wav")
-//                        ? ".wav"
-//                        : ".m4a",
-//                "",
-//              );
-//          _gotSongs.add(
-//            Song(
-//              songName: displayName,
-//              album: songs['album'],
-//              artist: songs['artist'],
-//              file: File(songs['path']),
-//            ),
-//          );
-//        }
-//      }
-//      _songs = _gotSongs;
-//      notifyListeners();
-//    } on PlatformException {
-//      audioPath = 'Failed to get path';
-//    }
-//  }
 }
