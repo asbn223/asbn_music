@@ -184,13 +184,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4"
-  neumorphic:
+  neuomorphic_container:
     dependency: "direct main"
     description:
-      name: neumorphic
+      name: neuomorphic_container
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.2"
+    version: "2.0.3"
   path:
     dependency: transitive
     description:

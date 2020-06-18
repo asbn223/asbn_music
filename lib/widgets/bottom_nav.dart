@@ -26,7 +26,7 @@ class BottomNav extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.play_arrow),
-                  onPressed: PlayerHelper.playPauseSong,
+                  onPressed: PlayerHelper.playSong,
                 ),
                 IconButton(
                   icon: Icon(Icons.skip_next),

@@ -1,7 +1,7 @@
 import 'package:clay_containers/widgets/clay_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musicplayer/helper/player_helper.dart';
+import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/components/clay_button.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +16,15 @@ class TopContainerBody extends StatefulWidget {
 }
 
 class _TopContainerBodyState extends State<TopContainerBody> {
+  //this method is used for changing the icon of the play-pause accordingly
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final songId = ModalRoute.of(context).settings.arguments as String;
-    final songs = Provider.of<Songs>(context).songs;
-    final song = songs.firstWhere((music) => music.id == songId);
+    String songId = ModalRoute.of(context).settings.arguments as String;
+    Songs songs = Provider.of<Songs>(context, listen: false);
+    Song song = songs.songs.firstWhere((music) => music.id == songId);
+    int songIndex = songs.songs.indexOf(song);
     return Stack(
       children: <Widget>[
         widget.isOpened
@@ -48,7 +51,12 @@ class _TopContainerBodyState extends State<TopContainerBody> {
           left: 35,
           child: ClayButton(
             icon: Icons.skip_previous,
-            onPressed: null,
+            onPressed: () {
+              songs.prevSong(songIndex - 1);
+              songId = songs.songs[songIndex - 1].id;
+              song = songs.songs.firstWhere((music) => music.id == songId);
+              songIndex = songs.songs.indexOf(song);
+            },
             color: Color(0xFF4B4B4B),
             iconColor: Color(0xFFFFFFFF),
           ),
@@ -58,7 +66,12 @@ class _TopContainerBodyState extends State<TopContainerBody> {
           right: 35,
           child: ClayButton(
             icon: Icons.skip_next,
-            onPressed: null,
+            onPressed: () {
+              songs.nextSong(songIndex + 1);
+              songId = songs.songs[songIndex + 1].id;
+              song = songs.songs.firstWhere((music) => music.id == songId);
+              songIndex = songs.songs.indexOf(song);
+            },
             color: Color(0xFF4B4B4B),
             iconColor: Color(0xFFFFFFFF),
           ),
@@ -67,10 +80,22 @@ class _TopContainerBodyState extends State<TopContainerBody> {
             ? Text('')
             : Positioned(
                 bottom: 35,
-                left: size.width / 2 - 25,
+                left: size.width / 3,
                 child: ClayButton(
                   icon: Icons.play_arrow,
-                  onPressed: PlayerHelper.playPauseSong,
+                  onPressed: songs.playSong,
+                  color: Color(0xFF4B4B4B),
+                  iconColor: Color(0xFFFFFFFF),
+                ),
+              ),
+        widget.isOpened
+            ? Text('')
+            : Positioned(
+                bottom: 35,
+                left: size.width / 1.8,
+                child: ClayButton(
+                  icon: Icons.pause,
+                  onPressed: songs.pauseSong,
                   color: Color(0xFF4B4B4B),
                   iconColor: Color(0xFFFFFFFF),
                 ),
@@ -94,12 +119,9 @@ class _TopContainerBodyState extends State<TopContainerBody> {
               child: ClipRRect(
                 borderRadius:
                     BorderRadius.circular(widget.isOpened ? 100 : 150),
-                child: GestureDetector(
-                  onTap: widget.isOpened ? () => print("sabin") : null,
-                  child: Image.asset(
-                    song.imgFile,
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.asset(
+                  song.imgFile,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -126,6 +148,30 @@ class _TopContainerBodyState extends State<TopContainerBody> {
             icon: Icons.playlist_add,
             onPressed: widget.isOpened ? null : null,
             color: Color(0xFFFF7979),
+            iconColor: Color(0xFFFFFFFF),
+          ),
+        ),
+        AnimatedPositioned(
+          left: widget.isOpened ? 75 : 10,
+          top: 15,
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 750),
+          child: ClayButton(
+            icon: Icons.play_arrow,
+            onPressed: songs.playSong,
+            color: Color(0xFF4B4B4B),
+            iconColor: Color(0xFFFFFFFF),
+          ),
+        ),
+        AnimatedPositioned(
+          right: widget.isOpened ? 75 : 10,
+          top: 15,
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 750),
+          child: ClayButton(
+            icon: Icons.pause,
+            onPressed: songs.pauseSong,
+            color: Color(0xFF4B4B4B),
             iconColor: Color(0xFFFFFFFF),
           ),
         ),

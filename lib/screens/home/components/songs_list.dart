@@ -1,8 +1,8 @@
 import 'package:clay_containers/clay_containers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:musicplayer/helper/player_helper.dart';
 import 'package:musicplayer/models/song.dart';
+import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +14,11 @@ class SongsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final song = Provider.of<Song>(context, listen: false);
+    final songs = Provider.of<Songs>(context, listen: false);
     return GestureDetector(
       onTap: () {
         routeToNowPlaying(context, song.id);
-        PlayerHelper.openSong(
+        songs.openSong(
           songFile: song.songFile,
           id: song.id,
           songName: song.songName,
