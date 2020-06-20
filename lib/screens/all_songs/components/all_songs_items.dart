@@ -15,17 +15,19 @@ class AllSongsItems extends StatelessWidget {
         subtitle: Text(song.artist),
         trailing: Icon(Icons.favorite_border),
         onTap: () {
-          Navigator.of(context).pushNamed(
-            NowPlayingScreen.routeName,
-            arguments: song.id,
-          );
-          songs.openSong(
-            songFile: song.songFile,
-            id: song.id,
-            songName: song.songName,
-            artist: song.artist,
-            album: song.album,
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return NowPlayingScreen(
+              songId: song.id,
+            );
+          }));
+//          songs.openSong(
+//            songFile: song.songFile,
+//            id: song.id,
+//            songName: song.songName,
+//            artist: song.artist,
+//            album: song.album,
+//          );
+          Songs.playSong(song.songFile);
         });
   }
 }

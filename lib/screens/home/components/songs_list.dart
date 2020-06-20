@@ -1,5 +1,6 @@
 import 'package:clay_containers/clay_containers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
@@ -8,23 +9,38 @@ import 'package:provider/provider.dart';
 
 class SongsList extends StatelessWidget {
   void routeToNowPlaying(BuildContext context, String id) {
-    Navigator.pushNamed(context, NowPlayingScreen.routeName, arguments: id);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return NowPlayingScreen(
+            songId: id,
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final song = Provider.of<Song>(context, listen: false);
-    final songs = Provider.of<Songs>(context, listen: false);
+//    final songs = Provider.of<Songs>(context, listen: false);
     return GestureDetector(
       onTap: () {
+        Songs.playSong(song.songFile);
         routeToNowPlaying(context, song.id);
-        songs.openSong(
-          songFile: song.songFile,
-          id: song.id,
-          songName: song.songName,
-          artist: song.artist,
-          album: song.album,
+        MediaNotification.showNotification(
+          title: song.songName,
+          author: song.artist,
+          isPlaying: true,
         );
+//        songs.openSong(
+//          songFile: song.songFile,
+//          id: song.id,
+//          songName: song.songName,
+//          artist: song.artist,
+//          album: song.album,
+//        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(

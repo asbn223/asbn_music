@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:musicplayer/models/song.dart';
@@ -41,62 +41,76 @@ class Songs with ChangeNotifier {
     }
   }
 
-  final AssetsAudioPlayer aap = AssetsAudioPlayer();
+//  final AssetsAudioPlayer aap = AssetsAudioPlayer();
+//
+//  void openSong({
+//    String songFile,
+//    String id,
+//    String songName,
+//    String artist,
+//    String album,
+//  }) {
+//    aap.stop();
+//    aap.open(
+//      Audio.file(
+//        songFile,
+//        metas: Metas(
+//          id: id,
+//          title: songName,
+//          artist: artist,
+//          album: album,
+//        ),
+//      ),
+//      showNotification: true,
+//    );
+//    aap.play();
+//  }
+//
+//  void playSong() {
+//    aap.play();
+//  }
+//
+//  void pauseSong() {
+//    aap.pause();
+//  }
+//
+//  void nextSong(int index) {
+//    if (index <= 0) {
+//      return;
+//    }
+//    openSong(
+//      songFile: _songs[index].songFile,
+//      id: _songs[index].id,
+//      songName: _songs[index].songName,
+//      artist: _songs[index].artist,
+//      album: _songs[index].album,
+//    );
+//  }
+//
+//  void prevSong(int index) {
+//    if (index <= 0) {
+//      return;
+//    }
+//    openSong(
+//      songFile: _songs[index].songFile,
+//      id: _songs[index].id,
+//      songName: _songs[index].songName,
+//      artist: _songs[index].artist,
+//      album: _songs[index].album,
+//    );
+//  }
 
-  void openSong({
-    String songFile,
-    String id,
-    String songName,
-    String artist,
-    String album,
-  }) {
-    aap.stop();
-    aap.open(
-      Audio.file(
-        songFile,
-        metas: Metas(
-          id: id,
-          title: songName,
-          artist: artist,
-          album: album,
-        ),
-      ),
-      showNotification: true,
-    );
-    aap.play();
+  static AudioPlayer audioPlayer = AudioPlayer();
+
+  static void playSong(String fileName) {
+    audioPlayer.play(fileName, isLocal: true);
   }
 
-  void playSong() {
-    aap.play();
+  static void pauseSong() {
+    audioPlayer.pause();
   }
 
-  void pauseSong() {
-    aap.pause();
-  }
-
-  void nextSong(int index) {
-    if (index <= 0) {
-      return;
-    }
-    openSong(
-      songFile: _songs[index].songFile,
-      id: _songs[index].id,
-      songName: _songs[index].songName,
-      artist: _songs[index].artist,
-      album: _songs[index].album,
-    );
-  }
-
-  void prevSong(int index) {
-    if (index <= 0) {
-      return;
-    }
-    openSong(
-      songFile: _songs[index].songFile,
-      id: _songs[index].id,
-      songName: _songs[index].songName,
-      artist: _songs[index].artist,
-      album: _songs[index].album,
-    );
+  static void resumeSong() {
+    audioPlayer.resume();
   }
 }
