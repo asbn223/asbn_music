@@ -4,6 +4,7 @@ import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:neuomorphic_container/neuomorphic_container.dart';
 import 'package:provider/provider.dart';
@@ -333,7 +334,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
                         icon: Icons.playlist_add,
-                        onPressed: isPlaylistOpened ? null : null,
+                        onPressed: isPlaylistOpened
+                            ? () => Navigator.of(context).pushNamed(
+                                AddInScreen.routeName,
+                                arguments: song.id)
+                            : null,
                         color: Color(0xFFFF7979),
                         iconColor: Color(0xFFFFFFFF),
                       ),
@@ -347,7 +352,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         icon: Icons.play_arrow,
                         onPressed: () {
                           Songs.resumeSong();
-                          setState(() => status = 'play');
+                          MediaNotification.showNotification(
+                            title: song.songName,
+                            author: song.artist,
+                            isPlaying: true,
+                          );
                         },
                         color: Color(0xFF4B4B4B),
                         iconColor: Color(0xFFFFFFFF),
@@ -362,7 +371,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         icon: Icons.pause,
                         onPressed: () {
                           Songs.pauseSong();
-                          setState(() => status = 'pause');
+                          MediaNotification.showNotification(
+                            title: song.songName,
+                            author: song.artist,
+                            isPlaying: false,
+                          );
                         },
                         color: Color(0xFF4B4B4B),
                         iconColor: Color(0xFFFFFFFF),

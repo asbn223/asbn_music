@@ -12,7 +12,7 @@ class Songs with ChangeNotifier {
     return [..._songs];
   }
 
-  final FlutterAudioQuery audioQuery = FlutterAudioQuery();
+  static FlutterAudioQuery audioQuery = FlutterAudioQuery();
   var rng = new Random();
   Future<void> getSongs() async {
     List<Song> _gotSongs = [];
