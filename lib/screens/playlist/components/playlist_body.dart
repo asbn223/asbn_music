@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class PlaylistBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final playlist = Provider.of<Playlist>(context);
+    final playlist = Provider.of<Playlist>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => Navigator.pushNamed(

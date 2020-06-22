@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:musicplayer/models/playlist.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/screens/now_playing2/now_playing_screen2.dart';
 import 'package:provider/provider.dart';
 
 class SongListBody extends StatelessWidget {
@@ -29,6 +30,15 @@ class SongListBody extends StatelessWidget {
             ),
             title: Text(song.songName),
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return NowPlayingScreen2(
+                    songId: song.id,
+                    playlistId: pl.playlistId,
+                  );
+                }),
+              );
               Songs.playSong(song.songFile);
               MediaNotification.showNotification(
                 title: song.songName,

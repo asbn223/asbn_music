@@ -50,10 +50,10 @@ class Playlists with ChangeNotifier {
       );
       playListIndex = _playlists
           .indexWhere((pl) => pl.playlistId == playlistContent['playlistId']);
-      print(playListIndex);
+//      print(playListIndex);
     }
     List<dynamic> newSong = playlistContent['songId'];
-    print(newSong);
+//    print(newSong);
 
     for (int i = 0; i < newSong.length; i++) {
       _playlists[playListIndex].songId.add(newSong[i].toString());
@@ -61,4 +61,6 @@ class Playlists with ChangeNotifier {
     print(_playlists[playListIndex].songId);
     notifyListeners();
   }
+
+
 }

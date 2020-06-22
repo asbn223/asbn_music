@@ -14,8 +14,14 @@ class SongListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(playlist.playlistName),
       ),
-      body:
-          ChangeNotifierProvider.value(value: playlist, child: SongListBody()),
+      body: ChangeNotifierProvider.value(
+        value: playlist,
+        child: SongListBody(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.shuffle),
+        onPressed: () {},
+      ),
     );
   }
 }
