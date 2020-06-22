@@ -6,17 +6,21 @@ class AddToBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final playlists = Provider.of<Playlists>(context);
+    final playlists = Provider.of<Playlists>(context, listen: false);
     final songId = ModalRoute.of(context).settings.arguments as String;
     print(songId);
     return Container(
       height: size.height,
       width: double.infinity,
-      child: playlists.playlists.length == 0
-          ? Center(
-              child: Text('No Playlists'),
-            )
-          : ListView.builder(
+      child: FutureBuilder(
+        future: playlists.fetchPlaylist(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(playlists.playlists[index].playlistName),
@@ -29,7 +33,10 @@ class AddToBody extends StatelessWidget {
                 );
               },
               itemCount: playlists.playlists.length,
-            ),
+            );
+          }
+        },
+      ),
     );
   }
 }

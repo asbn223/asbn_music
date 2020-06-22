@@ -8,7 +8,7 @@ class AllSongsItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final song = Provider.of<Song>(context, listen: false);
-    final songs = Provider.of<Songs>(context, listen: false);
+//    final songs = Provider.of<Songs>(context, listen: false);
 
     return ListTile(
         title: Text(song.songName),

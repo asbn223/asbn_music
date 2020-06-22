@@ -46,6 +46,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
     MediaNotification.setListener('prev', () {
       if (int.parse(widget.songId) < 0) {
+        // ignore: unnecessary_statements
         null;
       } else {
         prevSong(id: widget.songId);
