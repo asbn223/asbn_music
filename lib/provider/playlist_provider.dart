@@ -102,28 +102,31 @@ class Playlists with ChangeNotifier {
 //    notifyListeners();
 //  }
 
-  Future<void> fetchData() async {
+  Future<List<Playlist>> fetchData() async {
     if (_playlists.isNotEmpty) {
       print("what");
       return null;
     } else {
       final List<Playlist> pl = [];
-      final snap = firestoreInstance.collection('playlists').getDocuments();
-      snap.then((QuerySnapshot value) => value.documents.forEach((element) {
-            List<dynamic> val = element['songId'];
-            List<String> newSong = [];
-            for (int i = 0; i < val.length; i++) {
-              newSong.add(val[i]);
-            }
-            pl.add(
-              Playlist(
-                playlistId: element['playlistId'],
-                playlistName: element['playlistName'],
-                songId: newSong,
-              ),
-            );
-          }));
+      final snap =
+          await firestoreInstance.collection('playlists').getDocuments();
+      print(snap.documents);
+      snap.documents.forEach((element) {
+        List<dynamic> val = element['songId'];
+        List<String> newSong = [];
+        for (int i = 0; i < val.length; i++) {
+          newSong.add(val[i]);
+        }
+        pl.add(
+          Playlist(
+            playlistId: element['playlistId'],
+            playlistName: element['playlistName'],
+            songId: newSong,
+          ),
+        );
+      });
       _playlists = pl;
+      return _playlists;
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/models/playlist.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/screens/playlist/components/playlist_body.dart';
 import 'package:provider/provider.dart';
@@ -11,49 +12,29 @@ class PlaylistScreen extends StatefulWidget {
 }
 
 class _PlaylistScreenState extends State<PlaylistScreen> {
-  bool _isInit = true;
-  bool _isLoading = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      Provider.of<Playlists>(context).fetchData().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-    }
-    _isInit = false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Playlists"),
-      ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Consumer<Playlists>(
-              builder:
-                  (BuildContext context, Playlists playlist, Widget child) {
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ChangeNotifierProvider.value(
-                      value: playlist.playlists[index],
-                      child: PlaylistBody(),
-                    );
-                  },
-                  itemCount: playlist.playlists.length,
-                );
-              },
-            ),
-    );
+        appBar: AppBar(
+          title: Text("Playlists"),
+        ),
+        body: FutureBuilder(
+          future: Provider.of<Playlists>(context, listen: false).fetchData(),
+          builder: (context, snapshot) {
+            return snapshot.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemBuilder: (context, index) {
+                      return ChangeNotifierProvider<Playlist>(
+                        create: (_) => snapshot.data[index],
+                        child: PlaylistBody(),
+                      );
+                    },
+                    itemCount: snapshot.data.length,
+                  );
+          },
+        ));
   }
 }

@@ -51,7 +51,8 @@ class _HomeBodyState extends State<HomeBody> {
                     crossAxisCount: 2,
                     childAspectRatio: 1.5 / 1.8,
                   ),
-                  itemCount: 100,
+                  itemCount:
+                      songData.songs.length > 100 ? 100 : songData.songs.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ChangeNotifierProvider.value(
                       value: songData.songs[index],

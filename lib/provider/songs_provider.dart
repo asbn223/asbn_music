@@ -14,7 +14,7 @@ class Songs with ChangeNotifier {
 
   static FlutterAudioQuery audioQuery = FlutterAudioQuery();
   var rng = new Random();
-  Future<void> getSongs() async {
+  Future<List<Song>> getSongs() async {
     List<Song> _gotSongs = [];
     int id = 1;
     int imgId = 1;
@@ -35,7 +35,8 @@ class Songs with ChangeNotifier {
         imgId = rng.nextInt(6) + 1;
       });
       _songs = _gotSongs;
-      notifyListeners();
+      return _songs;
+//      notifyListeners();
     } catch (error) {
       throw (error);
     }
