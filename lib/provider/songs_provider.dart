@@ -20,7 +20,7 @@ class Songs with ChangeNotifier {
     int imgId = 1;
     try {
       List<SongInfo> songs = await audioQuery.getSongs();
-      await songs.forEach((song) {
+      songs.forEach((song) {
         _gotSongs.add(
           Song(
             id: id.toString(),

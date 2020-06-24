@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/components/add_in_body.dart';
@@ -41,7 +43,8 @@ class AddInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songId = ModalRoute.of(context).settings.arguments as String;
-    final Playlists playlists = Provider.of<Playlists>(context, listen: false);
+    final Playlists playlists = Provider.of<Playlists>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Add to Playlist"),
@@ -52,9 +55,10 @@ class AddInScreen extends StatelessWidget {
               _showDialog(
                 context: context,
                 onPressed: () {
-                  final len = playlists.playlists.length;
-                  playlists.addInPlayList('playlist${(len + 1).toString()}',
-                      _controller.text, songId);
+                  var rng = new Random();
+                  int num = rng.nextInt(999999);
+                  playlists.addInPlayList(
+                      'playlist${num.toString()}', _controller.text, songId);
                   Navigator.of(context).pop();
                 },
               );

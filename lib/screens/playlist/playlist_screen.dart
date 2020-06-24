@@ -21,7 +21,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Playlists>(context).fetchPlaylist().then((_) {
+      Provider.of<Playlists>(context).fetchData().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -32,26 +32,28 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final playlist = Provider.of<Playlists>(context, listen: false).playlists;
     return Scaffold(
       appBar: AppBar(
         title: Text("Playlists"),
       ),
-      body: Center(
-        child: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  return ChangeNotifierProvider.value(
-                    value: playlist[index],
-                    child: PlaylistBody(),
-                  );
-                },
-                itemCount: playlist.length,
-              ),
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Consumer<Playlists>(
+              builder:
+                  (BuildContext context, Playlists playlist, Widget child) {
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ChangeNotifierProvider.value(
+                      value: playlist.playlists[index],
+                      child: PlaylistBody(),
+                    );
+                  },
+                  itemCount: playlist.playlists.length,
+                );
+              },
+            ),
     );
   }
 }

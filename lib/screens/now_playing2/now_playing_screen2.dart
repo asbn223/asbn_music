@@ -42,7 +42,7 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
     });
 
     MediaNotification.setListener('next', () {
-      nextSong(id: widget.songId);
+      nextSong(id: widget.songId, plId: widget.playlistId);
     });
 
     MediaNotification.setListener('prev', () {
@@ -50,16 +50,25 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
         // ignore: unnecessary_statements
         null;
       } else {
-        prevSong(id: widget.songId);
+        prevSong(id: widget.songId, plId: widget.playlistId);
       }
     });
   }
 
-  void nextSong({String id}) {
-    if (id != null) {
-      setState(() {
-        widget.songId = (int.parse(id) + 1).toString();
-      });
+  void nextSong({String id, String plId}) {
+    var pl = Provider.of<Playlists>(context, listen: false).playlists;
+    print(pl);
+    Playlist play;
+    int songIndex;
+    if (plId != null) {
+      play = pl.firstWhere((element) => element.playlistId == plId);
+      songIndex = play.songId.indexWhere((sId) => sId == id);
+      if (id != null) {
+        print(id);
+        setState(() {
+          widget.songId = play.songId[songIndex + 1];
+        });
+      }
     }
     Songs songs = Provider.of(context, listen: false);
     Song song = songs.songs.firstWhere((song) => song.id == widget.songId);
@@ -71,13 +80,18 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
     );
   }
 
-  void prevSong({String id}) {
-    if (id != null) {
-      if (int.parse(id) < 0) {
-        return;
-      } else {
+  void prevSong({String id, String plId}) {
+    var pl = Provider.of<Playlists>(context, listen: false).playlists;
+    print(pl);
+    Playlist play;
+    int songIndex;
+    if (plId != null) {
+      play = pl.firstWhere((element) => element.playlistId == plId);
+      songIndex = play.songId.indexWhere((sId) => sId == id);
+      if (id != null) {
+        print(id);
         setState(() {
-          widget.songId = (int.parse(id) - 1).toString();
+          widget.songId = play.songId[songIndex - 1];
         });
       }
     }
@@ -376,6 +390,25 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
                         icon: Icons.pause,
+                        onPressed: () {
+                          Songs.pauseSong();
+                          MediaNotification.showNotification(
+                            title: song.songName,
+                            author: song.artist,
+                            isPlaying: false,
+                          );
+                        },
+                        color: Color(0xFF4B4B4B),
+                        iconColor: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      right: isPlaylistOpened ? 155 : 10,
+                      top: isPlaylistOpened ? 0 : 15,
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 750),
+                      child: ClayButton(
+                        icon: Icons.queue_music,
                         onPressed: () {
                           Songs.pauseSong();
                           MediaNotification.showNotification(

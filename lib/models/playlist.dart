@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Playlist with ChangeNotifier {
-  final String playlistId, playlistName;
+  String playlistId, playlistName;
   List<String> songId;
 
   Playlist({

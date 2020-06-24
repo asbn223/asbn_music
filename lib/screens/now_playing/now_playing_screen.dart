@@ -1,4 +1,5 @@
 import 'package:clay_containers/clay_containers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -370,6 +371,25 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
                         icon: Icons.pause,
+                        onPressed: () {
+                          Songs.pauseSong();
+                          MediaNotification.showNotification(
+                            title: song.songName,
+                            author: song.artist,
+                            isPlaying: false,
+                          );
+                        },
+                        color: Color(0xFF4B4B4B),
+                        iconColor: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      right: isPlaylistOpened ? 155 : 10,
+                      top: isPlaylistOpened ? 0 : 15,
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 750),
+                      child: ClayButton(
+                        icon: Icons.queue_music,
                         onPressed: () {
                           Songs.pauseSong();
                           MediaNotification.showNotification(
