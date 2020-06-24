@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/models/playlist.dart';
@@ -5,6 +7,7 @@ import 'package:musicplayer/models/playlist.dart';
 class Playlists with ChangeNotifier {
   final firestoreInstance = Firestore.instance;
   List<Playlist> _playlists = [];
+  var rng = new Random();
 
   List<Playlist> get playlists {
     return [..._playlists];
@@ -14,13 +17,14 @@ class Playlists with ChangeNotifier {
       String playlistId, String playName, String songId) async {
     int playListIndex =
         _playlists.indexWhere((pl) => pl.playlistId == playlistId);
-
+    int imgId = rng.nextInt(6) + 1;
     if (playListIndex < 0) {
       _playlists.add(
         Playlist(
           playlistId: playlistId,
           playlistName: playName,
           songId: [],
+          imageUrl: 'assets/resources/pl${imgId.toString()}.jpg',
         ),
       );
       playListIndex =
@@ -43,21 +47,6 @@ class Playlists with ChangeNotifier {
     }
   }
 
-//  Future<void> onSync(String playlistId, String playName) async {
-//    print('pressed');
-//    int playListIndex =
-//        _playlists.indexWhere((pl) => pl.playlistId == playlistId);
-//    print(playlistId);
-//    final docRef = await firestoreInstance.collection("playlists");
-//    print(docRef.document(playlistId).documentID);
-//    if (docRef.document(playlistId).documentID == playlistId) {
-//      print('only update');
-//      updateData(docRef.document(playlistId).documentID,
-//          _playlists[playListIndex].songId);
-//      fetchData();
-//    }
-//  }
-
   Future<void> updateData({String id, String songId, List<String> song}) async {
     if (songId != null) {
       song.add(songId);
@@ -68,50 +57,17 @@ class Playlists with ChangeNotifier {
         .updateData({'playlistId': id, 'songId': song});
   }
 
-//  Future<void> fetchPlaylist() async {
-//    if (_playlists.isNotEmpty) {
-//      return;
-//    }
-//    List<Map<String, dynamic>> playlistContent = SaveFile.fileContent;
-//    print(playlistContent);
-//    int playListIndex = _playlists
-//        .indexWhere((pl) => pl.playlistId == playlistContent['playlistId']);
-//    if (playListIndex < 0) {
-//      _playlists.add(
-//        Playlist(
-//          playlistId: playlistContent['playlistId'],
-//          playlistName: playlistContent['playlistName'],
-//          songId: [],
-//        ),
-//      );
-//
-//      playListIndex = _playlists
-//          .indexWhere((pl) => pl.playlistId == playlistContent['playlistId']);
-////      print(playListIndex);
-//    }
-//    List<dynamic> newSong = playlistContent['songId'];
-////    print(newSong);
-//
-//    for (int j = 0; j < _playlists.length; j++) {
-//      for (int i = 0; i < newSong.length; i++) {
-//        _playlists[j].songId.add(newSong[i].toString());
-//      }
-//    }
-//
-//    print(_playlists[playListIndex].songId);
-//    notifyListeners();
-//  }
-
   Future<List<Playlist>> fetchData() async {
     if (_playlists.isNotEmpty) {
       print("what");
-      return null;
+      return _playlists;
     } else {
       final List<Playlist> pl = [];
       final snap =
           await firestoreInstance.collection('playlists').getDocuments();
       print(snap.documents);
       snap.documents.forEach((element) {
+        int imgId = rng.nextInt(6) + 1;
         List<dynamic> val = element['songId'];
         List<String> newSong = [];
         for (int i = 0; i < val.length; i++) {
@@ -122,11 +78,30 @@ class Playlists with ChangeNotifier {
             playlistId: element['playlistId'],
             playlistName: element['playlistName'],
             songId: newSong,
+            imageUrl: 'assets/resources/pl${imgId.toString()}.jpg',
           ),
         );
       });
       _playlists = pl;
+
       return _playlists;
+    }
+  }
+
+  Future<void> deletePlayList({String playlistId}) {
+    int playListIndex =
+        _playlists.indexWhere((pl) => pl.playlistId == playlistId);
+    var playlist = _playlists[playListIndex];
+    _playlists.removeAt(playListIndex);
+    notifyListeners();
+
+    try {
+      firestoreInstance.collection('playlists').document(playlistId).delete();
+      playlist = null;
+    } catch (error) {
+      _playlists.insert(playListIndex, playlist);
+      notifyListeners();
+      throw (error);
     }
   }
 }
