@@ -22,7 +22,8 @@ class NowPlayingScreen extends StatefulWidget {
   _NowPlayingScreenState createState() => _NowPlayingScreenState();
 }
 
-class _NowPlayingScreenState extends State<NowPlayingScreen> {
+class _NowPlayingScreenState extends State<NowPlayingScreen>
+    with SingleTickerProviderStateMixin {
   bool isPlaylistOpened = false;
 
   String status = 'hidden';
@@ -31,20 +32,26 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
   void initState() {
     super.initState();
 
+    //Controller for the button
+
+    //Set Notification to Pause and song will be paused
     MediaNotification.setListener('pause', () {
       setState(() => status = 'pause');
       Songs.pauseSong();
     });
 
+    //Set Notification to Play and song will be played
     MediaNotification.setListener('play', () {
       setState(() => status = 'play');
       Songs.resumeSong();
     });
 
+    //Song will be next after pressing next in notification
     MediaNotification.setListener('next', () {
       nextSong(id: widget.songId);
     });
 
+    //Song will be previous after pressing next in notification
     MediaNotification.setListener('prev', () {
       if (int.parse(widget.songId) < 0) {
         // ignore: unnecessary_statements
@@ -55,6 +62,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     });
   }
 
+  //This method will play the next songs if pressed
   void nextSong({String id}) {
     if (id != null) {
       setState(() {
@@ -71,6 +79,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     );
   }
 
+  //This method will play the previous songs if pressed
   void prevSong({String id}) {
     if (id != null) {
       if (int.parse(id) < 0) {
@@ -91,6 +100,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     );
   }
 
+  //This method will create container to show details of playing song
   Widget songDetailContainer({
     BuildContext context,
     Size size,

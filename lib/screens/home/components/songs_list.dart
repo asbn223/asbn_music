@@ -8,6 +8,8 @@ import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
 class SongsList extends StatelessWidget {
+
+  //Navigate to the selected routes
   void routeToNowPlaying(BuildContext context, String id) {
     Navigator.push(
       context,
@@ -27,20 +29,17 @@ class SongsList extends StatelessWidget {
 //    final songs = Provider.of<Songs>(context, listen: false);
     return GestureDetector(
       onTap: () {
+        //Play the selected songs
         Songs.playSong(song.songFile);
+
         routeToNowPlaying(context, song.id);
+
+        //Will show Notification with info of played song
         MediaNotification.showNotification(
           title: song.songName,
           author: song.artist,
           isPlaying: true,
         );
-//        songs.openSong(
-//          songFile: song.songFile,
-//          id: song.id,
-//          songName: song.songName,
-//          artist: song.artist,
-//          album: song.album,
-//        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(

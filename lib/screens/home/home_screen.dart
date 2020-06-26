@@ -31,6 +31,7 @@ class HomeScreen extends StatelessWidget {
       drawer: Drawer(
         child: CustomDrawer(),
       ),
+      //Multiple Floating Action Button.
       floatingActionButton: FloatingMenu(
         isMainButton: true,
         mainButtonColor: Colors.red,

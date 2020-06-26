@@ -10,12 +10,11 @@ class PlaylistBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final playlist = Provider.of<Playlist>(context, listen: false);
     final size = MediaQuery.of(context).size;
+
     return Dismissible(
       key: ValueKey(playlist.playlistId),
       direction: DismissDirection.endToStart,
       background: Container(
-//        padding: EdgeInsets.only(right: 10.0),
-//        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
         color: Colors.red,
         child: Icon(
           Icons.delete_forever,
@@ -38,26 +37,16 @@ class PlaylistBody extends StatelessWidget {
           margin: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2.0),
-            borderRadius: BorderRadius.circular(50),
           ),
           width: (size.width),
-          height: 200,
+          height: 75,
           child: Stack(
             children: <Widget>[
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: FadeInImage(
-                    placeholder: AssetImage('assets/resources/logo.png'),
-                    image: AssetImage(
-                      playlist.imageUrl,
-                    ),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                child: Image.asset(
+                  playlist.imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
               ),
               Center(
@@ -66,14 +55,13 @@ class PlaylistBody extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.getFont(
                     'Berkshire Swash',
-                    fontSize: 25,
+                    fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
               ),
             ],
           ),
-//          padding: EdgeInsets.only(left: 20.0, right: 20.0),
         ),
       ),
     );

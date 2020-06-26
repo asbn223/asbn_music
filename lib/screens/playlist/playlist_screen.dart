@@ -3,14 +3,9 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/screens/playlist/components/playlist_body.dart';
 import 'package:provider/provider.dart';
 
-class PlaylistScreen extends StatefulWidget {
+class PlaylistScreen extends StatelessWidget {
   static String routeName = 'playlist_screen';
 
-  @override
-  _PlaylistScreenState createState() => _PlaylistScreenState();
-}
-
-class _PlaylistScreenState extends State<PlaylistScreen> {
   @override
   Widget build(BuildContext context) {
     Playlists pl = Provider.of<Playlists>(context, listen: false);
