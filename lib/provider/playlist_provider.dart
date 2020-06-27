@@ -59,13 +59,11 @@ class Playlists with ChangeNotifier {
 
   Future<List<Playlist>> fetchData() async {
     if (_playlists.isNotEmpty) {
-      print("what");
       return _playlists;
     } else {
       final List<Playlist> pl = [];
       final snap =
           await firestoreInstance.collection('playlists').getDocuments();
-      print(snap.documents);
       snap.documents.forEach((element) {
         int imgId = rng.nextInt(6) + 1;
         List<dynamic> val = element['songId'];

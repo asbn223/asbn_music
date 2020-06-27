@@ -8,17 +8,17 @@ import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
 class SongsList extends StatelessWidget {
-
   //Navigate to the selected routes
   void routeToNowPlaying(BuildContext context, String id) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) {
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) {
           return NowPlayingScreen(
             songId: id,
           );
         },
+        transitionDuration: Duration(milliseconds: 500),
       ),
     );
   }
@@ -70,10 +70,13 @@ class SongsList extends StatelessWidget {
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
                     ),
-                    child: Image.asset(
-                      song.imgFile,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
+                    child: Hero(
+                      tag: song.id,
+                      child: Image.asset(
+                        song.imgFile,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
                     )),
               ),
               Container(

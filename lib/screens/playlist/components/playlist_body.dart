@@ -28,36 +28,67 @@ class PlaylistBody extends StatelessWidget {
             .deletePlayList(playlistId: playlist.playlistId);
       },
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(
+        onTap: () => Navigator.push(
           context,
-          SongListScreen.routeName,
-          arguments: playlist.playlistId,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) {
+              return SongListScreen(playlist.playlistId);
+            },
+            transitionDuration: Duration(milliseconds: 500),
+          ),
         ),
         child: Container(
           margin: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 2.0),
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.black26,
           ),
           width: (size.width),
-          height: 75,
-          child: Stack(
+          height: 150,
+          child: Row(
             children: <Widget>[
               Container(
-                child: Image.asset(
-                  playlist.imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                height: 125,
+                width: 125,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: Hero(
+                    tag: playlist.playlistId,
+                    child: Image.asset(
+                      playlist.imageUrl,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
                 ),
               ),
               Center(
-                child: Text(
-                  playlist.playlistName,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.getFont(
-                    'Berkshire Swash',
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      playlist.playlistName,
+                      textAlign: TextAlign.start,
+                      style: GoogleFonts.getFont(
+                        'Berkshire Swash',
+                        fontSize: 25,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      playlist.songId.length.toString() + " Songs",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.getFont(
+                        'Berkshire Swash',
+                        fontSize: 16,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -8,7 +8,6 @@ import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
-import 'package:musicplayer/screens/song_list/song_list_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
           AllSongsScreen.routeName: (context) => AllSongsScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           PlaylistScreen.routeName: (context) => PlaylistScreen(),
-          SongListScreen.routeName: (context) => SongListScreen(),
+//          SongListScreen.routeName: (context) => SongListScreen(),
 //          NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
         },
       ),

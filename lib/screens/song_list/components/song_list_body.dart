@@ -20,10 +20,13 @@ class SongListBody extends StatelessWidget {
           Container(
             height: size.height / 2 - 25,
             width: double.infinity,
-            child: Image.asset(
-              pl.imageUrl,
-              fit: BoxFit.cover,
-              width: double.infinity,
+            child: Hero(
+              tag: pl.playlistId,
+              child: Image.asset(
+                pl.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
             ),
           ),
           Align(

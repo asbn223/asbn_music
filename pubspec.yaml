@@ -45,6 +45,8 @@ dependencies:
   path_provider: ^1.6.11
   cloud_firestore: ^0.13.4+2
 
+  #For animations
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

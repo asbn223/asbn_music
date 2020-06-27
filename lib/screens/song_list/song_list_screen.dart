@@ -5,9 +5,10 @@ import 'package:provider/provider.dart';
 
 class SongListScreen extends StatelessWidget {
   static String routeName = 'song_list_screen';
+  String playlistId;
+  SongListScreen(this.playlistId);
   @override
   Widget build(BuildContext context) {
-    final playlistId = ModalRoute.of(context).settings.arguments as String;
     final playlists = Provider.of<Playlists>(context, listen: false).playlists;
     final playlist = playlists.firstWhere((pl) => pl.playlistId == playlistId);
     return Scaffold(

@@ -319,9 +319,12 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(
                                 isPlaylistOpened ? 100 : 150),
-                            child: Image.asset(
-                              song.imgFile,
-                              fit: BoxFit.cover,
+                            child: Hero(
+                              tag: song.id,
+                              child: Image.asset(
+                                song.imgFile,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
