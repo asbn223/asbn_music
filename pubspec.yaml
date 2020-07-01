@@ -35,10 +35,12 @@ dependencies:
   clay_containers: ^0.2.2
   floating_menu: ^0.1.0+hotfix.1
   neuomorphic_container: ^2.0.3
+
   #For Audio Players
   flutter_audio_query: ^0.3.4+2
   audioplayers: ^0.15.1
   flutter_media_notification: ^1.2.6
+  timer_count_down: ^1.0.4
 
   #For getting dir
   path: ^1.6.0

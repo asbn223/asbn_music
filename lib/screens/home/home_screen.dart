@@ -6,8 +6,6 @@ import 'package:musicplayer/screens/home/components/home_body.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
-//  final AssetsAudioPlayer _assetsAudioPlayer;
-//  HomeScreen(this._assetsAudioPlayer);
   static String routeName = '/home_screen';
 
   @override

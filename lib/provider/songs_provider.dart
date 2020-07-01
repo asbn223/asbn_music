@@ -28,6 +28,7 @@ class Songs with ChangeNotifier {
             artist: song.artist,
             album: song.album,
             songFile: song.filePath,
+            duration: song.duration,
             imgFile: ('assets/resources/music${imgId.toString()}.jpg'),
           ),
         );

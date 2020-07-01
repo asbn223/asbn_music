@@ -8,9 +8,12 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/now_playing2/components/clay_button.dart';
+import 'package:musicplayer/screens/play_queue/play_queue_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:neuomorphic_container/neuomorphic_container.dart';
 import 'package:provider/provider.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class NowPlayingScreen2 extends StatefulWidget {
   static String routeName = '/now_playing_screen2';
@@ -24,35 +27,52 @@ class NowPlayingScreen2 extends StatefulWidget {
 
 class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
   bool isPlaylistOpened = false;
-
+  final CountdownController countdownController = CountdownController();
   String status = 'hidden';
 
   @override
   void initState() {
     super.initState();
 
+    //Set Notification to Pause and song will be paused
     MediaNotification.setListener('pause', () {
       setState(() => status = 'pause');
       Songs.pauseSong();
+      countdownController.pause();
     });
 
+    //Set Notification to Play and song will be played
     MediaNotification.setListener('play', () {
       setState(() => status = 'play');
       Songs.resumeSong();
+      countdownController.resume();
     });
 
+    //Song will be next after pressing next in notification
     MediaNotification.setListener('next', () {
-      nextSong(id: widget.songId, plId: widget.playlistId);
+      nextSong(id: widget.songId);
+      countdownController.restart();
     });
 
+    //Song will be previous after pressing next in notification
     MediaNotification.setListener('prev', () {
       if (int.parse(widget.songId) < 0) {
         // ignore: unnecessary_statements
         null;
       } else {
-        prevSong(id: widget.songId, plId: widget.playlistId);
+        prevSong(id: widget.songId);
+        countdownController.restart();
       }
     });
+
+    countdownController.restart();
+  }
+
+  //Convert to seconds
+  int parseToSeconds(int ms) {
+    Duration duration = Duration(milliseconds: ms);
+    int seconds = (duration.inSeconds);
+    return seconds;
   }
 
   void nextSong({String id, String plId}) {
@@ -216,7 +236,28 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
                                 overflow: TextOverflow.clip,
                               ),
                             ),
+                          ),isPlaylistOpened
+                        ? Text('')
+                        : Positioned(
+                      bottom: 115,
+                      child: AnimatedContainer(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        duration: Duration(milliseconds: 750),
+                        child: Countdown(
+                          controller: countdownController,
+                          seconds: parseToSeconds(
+                            int.parse(song.duration),
                           ),
+                          build: (context, double time) {
+                            return Text(time.toString());
+                          },
+                          interval: Duration(milliseconds: 100),
+                          onFinished: () {
+                            nextSong(id: song.id);
+                          },
+                        ),
+                      ),
+                    ),
                     Positioned(
                       bottom: 35,
                       left: 35,
@@ -410,11 +451,13 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
                       child: ClayButton(
                         icon: Icons.queue_music,
                         onPressed: () {
-                          Songs.pauseSong();
-                          MediaNotification.showNotification(
-                            title: song.songName,
-                            author: song.artist,
-                            isPlaying: false,
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlayQueue(
+                                playlistId: play.playlistId,
+                              ),
+                            ),
                           );
                         },
                         color: Color(0xFF4B4B4B),

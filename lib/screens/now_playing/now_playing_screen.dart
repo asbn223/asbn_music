@@ -6,9 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
+import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:neuomorphic_container/neuomorphic_container.dart';
 import 'package:provider/provider.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 import 'components/clay_button.dart';
 
@@ -22,33 +25,33 @@ class NowPlayingScreen extends StatefulWidget {
   _NowPlayingScreenState createState() => _NowPlayingScreenState();
 }
 
-class _NowPlayingScreenState extends State<NowPlayingScreen>
-    with SingleTickerProviderStateMixin {
+class _NowPlayingScreenState extends State<NowPlayingScreen> {
   bool isPlaylistOpened = false;
-
+  final CountdownController countdownController = CountdownController();
   String status = 'hidden';
 
   @override
   void initState() {
     super.initState();
 
-    //Controller for the button
-
     //Set Notification to Pause and song will be paused
     MediaNotification.setListener('pause', () {
       setState(() => status = 'pause');
       Songs.pauseSong();
+      countdownController.pause();
     });
 
     //Set Notification to Play and song will be played
     MediaNotification.setListener('play', () {
       setState(() => status = 'play');
       Songs.resumeSong();
+      countdownController.resume();
     });
 
     //Song will be next after pressing next in notification
     MediaNotification.setListener('next', () {
       nextSong(id: widget.songId);
+      countdownController.restart();
     });
 
     //Song will be previous after pressing next in notification
@@ -58,8 +61,18 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
         null;
       } else {
         prevSong(id: widget.songId);
+        countdownController.restart();
       }
     });
+
+    countdownController.restart();
+  }
+
+  //Convert to seconds
+  int parseToSeconds(int ms) {
+    Duration duration = Duration(milliseconds: ms);
+    int seconds = (duration.inSeconds);
+    return seconds;
   }
 
   //This method will play the next songs if pressed
@@ -210,6 +223,28 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               ),
                             ),
                           ),
+                    isPlaylistOpened
+                        ? Text('')
+                        : Positioned(
+                            bottom: 115,
+                            child: AnimatedContainer(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              duration: Duration(milliseconds: 750),
+                              child: Countdown(
+                                controller: countdownController,
+                                seconds: parseToSeconds(
+                                  int.parse(song.duration),
+                                ),
+                                build: (context, double time) {
+                                  return Text(time.toString());
+                                },
+                                interval: Duration(milliseconds: 100),
+                                onFinished: () {
+                                  nextSong(id: song.id);
+                                },
+                              ),
+                            ),
+                          ),
                     Positioned(
                       bottom: 35,
                       left: 35,
@@ -223,12 +258,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               return;
                             }
                             widget.songId = songs.songs[songIndex - 1].id;
-                            print(widget.songId);
                             song = songs.songs.firstWhere(
                                 (music) => music.id == widget.songId);
                             songIndex = songs.songs.indexOf(song);
-                            print(songIndex);
                           });
+                          countdownController.restart();
                           prevSong();
                         },
                         color: Color(0xFF4B4B4B),
@@ -252,6 +286,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                                 (music) => music.id == widget.songId);
                             songIndex = songs.songs.indexOf(song);
                           });
+                          countdownController.restart();
                           nextSong();
                         },
                         color: Color(0xFF4B4B4B),
@@ -267,6 +302,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               icon: Icons.play_arrow,
                               onPressed: () {
                                 Songs.resumeSong();
+                                countdownController.resume();
                                 MediaNotification.showNotification(
                                   title: song.songName,
                                   author: song.artist,
@@ -286,6 +322,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                               icon: Icons.pause,
                               onPressed: () {
                                 Songs.pauseSong();
+                                countdownController.pause();
                                 MediaNotification.showNotification(
                                   title: song.songName,
                                   author: song.artist,
@@ -367,6 +404,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         icon: Icons.play_arrow,
                         onPressed: () {
                           Songs.resumeSong();
+                          countdownController.resume();
                           MediaNotification.showNotification(
                             title: song.songName,
                             author: song.artist,
@@ -386,6 +424,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                         icon: Icons.pause,
                         onPressed: () {
                           Songs.pauseSong();
+                          countdownController.pause();
                           MediaNotification.showNotification(
                             title: song.songName,
                             author: song.artist,
@@ -404,11 +443,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen>
                       child: ClayButton(
                         icon: Icons.queue_music,
                         onPressed: () {
-                          Songs.pauseSong();
-                          MediaNotification.showNotification(
-                            title: song.songName,
-                            author: song.artist,
-                            isPlaying: false,
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllSongsScreen(),
+                            ),
                           );
                         },
                         color: Color(0xFF4B4B4B),

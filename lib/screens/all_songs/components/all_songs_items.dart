@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
@@ -20,14 +21,13 @@ class AllSongsItems extends StatelessWidget {
               songId: song.id,
             );
           }));
-//          songs.openSong(
-//            songFile: song.songFile,
-//            id: song.id,
-//            songName: song.songName,
-//            artist: song.artist,
-//            album: song.album,
-//          );
           Songs.playSong(song.songFile);
+          //Will show Notification with info of played song
+          MediaNotification.showNotification(
+            title: song.songName,
+            author: song.artist,
+            isPlaying: true,
+          );
         });
   }
 }

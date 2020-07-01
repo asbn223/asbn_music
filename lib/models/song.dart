@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Song with ChangeNotifier {
-  final String id, songName, artist, album, playlist, imgFile, songFile;
-  bool isFav, isAdded;
+  final String id, songName, artist, album, imgFile, songFile, duration;
+  bool isFav;
 
   Song({
     @required this.id,
@@ -11,18 +11,12 @@ class Song with ChangeNotifier {
     @required this.album,
     @required this.songFile,
     @required this.imgFile,
-    this.playlist,
+    this.duration,
     this.isFav = false,
-    this.isAdded = false,
   });
 
   void toggleFav() {
     isFav = !isFav;
-    notifyListeners();
-  }
-
-  void toggleAdded() {
-    isAdded = !isAdded;
     notifyListeners();
   }
 }
