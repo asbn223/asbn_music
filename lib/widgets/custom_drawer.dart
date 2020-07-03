@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
+import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer_items.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -36,7 +38,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           title: "Songs",
           icon: Icons.music_note,
           color: Colors.amber,
-          onTap: null,
+          onTap: () => Navigator.pushNamed(context, AllSongsScreen.routeName),
         ),
         Divider(
           color: Color(0xFF808080),
@@ -46,7 +48,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           title: "Settings",
           icon: Icons.settings,
           color: Colors.lightBlue,
-          onTap: null,
+          onTap: () => Navigator.pushNamed(context, SettingsScreen.routeName),
         ),
         CustomDrawerItems(
           title: "Log Out",

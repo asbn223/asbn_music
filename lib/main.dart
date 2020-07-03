@@ -8,6 +8,7 @@ import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
+import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -18,7 +19,20 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDarkMode = false;
+
+  void toggleDarkMode() {
+    setState(() {
+      isDarkMode = !isDarkMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -33,16 +47,27 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "Music Player",
-        theme: ThemeData(
-          primaryColor: Color(0xFF341F97),
-          accentColor: Color(0xFFFAB1A0),
-        ),
+        theme: isDarkMode
+            ? ThemeData.dark().copyWith(
+                appBarTheme: AppBarTheme(color: Colors.black),
+                textTheme: TextTheme(
+                  body1: TextStyle(color: Colors.black),
+                  caption: TextStyle(color: Colors.white),
+                ),
+                accentColor: Color(0xFFFAB1A0),
+              )
+            : ThemeData(
+                primaryColor: Color(0xFF341F97),
+                accentColor: Color(0xFFFAB1A0),
+              ),
         home: HomeScreen(),
         routes: {
           AddInScreen.routeName: (context) => AddInScreen(),
           AllSongsScreen.routeName: (context) => AllSongsScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           PlaylistScreen.routeName: (context) => PlaylistScreen(),
+          SettingsScreen.routeName: (context) =>
+              SettingsScreen(isDarkMode, toggleDarkMode),
 //          SongListScreen.routeName: (context) => SongListScreen(),
 //          NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
         },

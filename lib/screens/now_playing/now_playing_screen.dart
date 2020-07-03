@@ -85,11 +85,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     Songs songs = Provider.of(context, listen: false);
     Song song = songs.songs.firstWhere((song) => song.id == widget.songId);
     Songs.playSong(song.songFile);
+
     MediaNotification.showNotification(
       title: song.songName,
       author: song.artist,
       isPlaying: true,
     );
+    countdownController.restart();
   }
 
   //This method will play the previous songs if pressed
@@ -111,6 +113,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       author: song.artist,
       isPlaying: true,
     );
+    countdownController.restart();
   }
 
   //This method will create container to show details of playing song
@@ -223,28 +226,26 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                               ),
                             ),
                           ),
-                    isPlaylistOpened
-                        ? Text('')
-                        : Positioned(
-                            bottom: 115,
-                            child: AnimatedContainer(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              duration: Duration(milliseconds: 750),
-                              child: Countdown(
-                                controller: countdownController,
-                                seconds: parseToSeconds(
-                                  int.parse(song.duration),
-                                ),
-                                build: (context, double time) {
-                                  return Text(time.toString());
-                                },
-                                interval: Duration(milliseconds: 100),
-                                onFinished: () {
-                                  nextSong(id: song.id);
-                                },
-                              ),
-                            ),
+                    Positioned(
+                      bottom: 115,
+                      child: AnimatedContainer(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        duration: Duration(milliseconds: 750),
+                        child: Countdown(
+                          controller: countdownController,
+                          seconds: parseToSeconds(
+                            int.parse(song.duration),
                           ),
+                          build: (context, double time) {
+                            return Text(time.toString());
+                          },
+                          interval: Duration(milliseconds: 100),
+                          onFinished: () {
+                            nextSong(id: song.id);
+                          },
+                        ),
+                      ),
+                    ),
                     Positioned(
                       bottom: 35,
                       left: 35,
@@ -262,7 +263,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                                 (music) => music.id == widget.songId);
                             songIndex = songs.songs.indexOf(song);
                           });
-                          countdownController.restart();
+//                          countdownController.restart();
                           prevSong();
                         },
                         color: Color(0xFF4B4B4B),
@@ -286,7 +287,6 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                                 (music) => music.id == widget.songId);
                             songIndex = songs.songs.indexOf(song);
                           });
-                          countdownController.restart();
                           nextSong();
                         },
                         color: Color(0xFF4B4B4B),
