@@ -190,7 +190,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     Songs songs = Provider.of<Songs>(context, listen: false);
     Song song = songs.songs.firstWhere((music) => music.id == widget.songId);
     int songIndex = songs.songs.indexOf(song);
-
+    String songDuration = song.duration;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -234,7 +234,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         child: Countdown(
                           controller: countdownController,
                           seconds: parseToSeconds(
-                            int.parse(song.duration),
+                            int.parse(songDuration),
                           ),
                           build: (context, double time) {
                             return Text(time.toString());
