@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
+import 'package:musicplayer/widgets/account_check.dart';
 import 'package:musicplayer/widgets/rounded_button.dart';
 import 'package:musicplayer/widgets/textfield_container.dart';
 import 'package:provider/provider.dart';
@@ -83,9 +84,6 @@ class RegisterBody extends StatelessWidget {
               text: 'Sign Up',
               textColor: Color(0xFFFFFFFF),
               press: () {
-                print(name);
-                print(email);
-                print(password);
                 if (name != null) {
                   if (!_isNumeric(name)) {
                     if (email != null) {
@@ -120,7 +118,7 @@ class RegisterBody extends StatelessWidget {
                 }
               },
             ),
-//            AccountCheck(false),
+            AccountCheck(false),
           ],
         ),
       ),

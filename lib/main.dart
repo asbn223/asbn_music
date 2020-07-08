@@ -8,7 +8,9 @@ import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
+import 'package:musicplayer/screens/login/login_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
+import 'package:musicplayer/screens/register/register_screen.dart';
 import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -64,12 +66,14 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Color(0xFF341F97),
                 accentColor: Color(0xFFFAB1A0),
               ),
-        home: HomeScreen(),
+        home: LoginScreen(),
         routes: {
           AddInScreen.routeName: (context) => AddInScreen(),
           AllSongsScreen.routeName: (context) => AllSongsScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           PlaylistScreen.routeName: (context) => PlaylistScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
+          RegisterScreen.routeName: (context) => RegisterScreen(),
           SettingsScreen.routeName: (context) =>
               SettingsScreen(isDarkMode, toggleDarkMode),
 //          SongListScreen.routeName: (context) => SongListScreen(),
