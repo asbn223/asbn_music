@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/playlist.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/song_list/song_list_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,7 @@ class PlaylistBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playlist = Provider.of<Playlist>(context, listen: false);
+    final user = Provider.of<Users>(context, listen: false).user;
     final size = MediaQuery.of(context).size;
 
     return Dismissible(
@@ -24,8 +26,8 @@ class PlaylistBody extends StatelessWidget {
         alignment: Alignment.centerRight,
       ),
       onDismissed: (direction) {
-        Provider.of<Playlists>(context, listen: false)
-            .deletePlayList(playlistId: playlist.playlistId);
+        Provider.of<Playlists>(context, listen: false).deletePlayList(
+            email: user[0].email, playlistId: playlist.playlistId);
       },
       child: GestureDetector(
         onTap: () => Navigator.push(

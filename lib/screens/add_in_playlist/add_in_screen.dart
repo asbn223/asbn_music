@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/components/add_in_body.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +45,7 @@ class AddInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final songId = ModalRoute.of(context).settings.arguments as String;
     final Playlists playlists = Provider.of<Playlists>(context);
+    final user = Provider.of<Users>(context, listen: false).user;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +60,11 @@ class AddInScreen extends StatelessWidget {
                   var rng = new Random();
                   int num = rng.nextInt(999999);
                   playlists.addInPlayList(
-                      'playlist${num.toString()}', _controller.text, songId);
+                    playlistId: 'playlist${num.toString()}',
+                    playName: _controller.text,
+                    songId: songId,
+                    email: user[0].email,
+                  );
                   Navigator.of(context).pop();
                 },
               );

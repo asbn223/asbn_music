@@ -9,7 +9,6 @@ import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
-import 'package:musicplayer/screens/register/register_screen.dart';
 import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +64,7 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Color(0xFF341F97),
                 accentColor: Color(0xFFFAB1A0),
               ),
-        home: RegisterScreen(),
+        home: HomeScreen(),
         routes: {
           AddInScreen.routeName: (context) => AddInScreen(),
           AllSongsScreen.routeName: (context) => AllSongsScreen(),

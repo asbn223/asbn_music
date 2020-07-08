@@ -1,13 +1,26 @@
 import 'package:floating_menu/floating_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/components/home_body.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static String routeName = '/home_screen';
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<Users>(context,listen: false).fetchUserData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

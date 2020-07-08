@@ -14,7 +14,7 @@ class Playlists with ChangeNotifier {
   }
 
   Future<void> addInPlayList(
-      String playlistId, String playName, String songId) async {
+      {String email, String playlistId, String playName, String songId}) async {
     int playListIndex =
         _playlists.indexWhere((pl) => pl.playlistId == playlistId);
     int imgId = rng.nextInt(6) + 1;
@@ -34,59 +34,78 @@ class Playlists with ChangeNotifier {
     notifyListeners();
     try {
       print('create');
-      final docRef = firestoreInstance.collection("playlists").add({
+      final docRef = firestoreInstance
+          .collection("Playlists")
+          .document(email)
+          .collection("Playlists")
+          .add({
         'playlistName': playName,
       });
       docRef.then((value) {
+        print(value.documentID);
         _playlists[playListIndex].playlistId = value.documentID;
         updateData(
-            id: value.documentID, song: _playlists[playListIndex].songId);
+            email: email,
+            id: value.documentID,
+            song: _playlists[playListIndex].songId);
       });
     } catch (error) {
       throw (error);
     }
   }
 
-  Future<void> updateData({String id, String songId, List<String> song}) async {
+  Future<void> updateData(
+      {String email, String id, String songId, List<String> song}) async {
     if (songId != null) {
       song.add(songId);
     }
     await firestoreInstance
-        .collection("playlists")
+        .collection("Playlists")
+        .document(email)
+        .collection("Playlists")
         .document(id)
-        .updateData({'playlistId': id, 'songId': song});
+        .updateData({
+      'playListId': id,
+      'songId': song,
+    });
   }
 
-  Future<List<Playlist>> fetchData() async {
-    if (_playlists.isNotEmpty) {
-      return _playlists;
-    } else {
-      final List<Playlist> pl = [];
-      final snap =
-          await firestoreInstance.collection('playlists').getDocuments();
-      snap.documents.forEach((element) {
-        int imgId = rng.nextInt(6) + 1;
-        List<dynamic> val = element['songId'];
-        List<String> newSong = [];
-        for (int i = 0; i < val.length; i++) {
-          newSong.add(val[i]);
-        }
-        pl.add(
-          Playlist(
-            playlistId: element['playlistId'],
-            playlistName: element['playlistName'],
-            songId: newSong,
-            imageUrl: 'assets/resources/pl${imgId.toString()}.jpg',
-          ),
-        );
-      });
-      _playlists = pl;
-
-      return _playlists;
+  Future<List<Playlist>> fetchData({String email}) async {
+    if (email.isNotEmpty) {
+      if (_playlists.isNotEmpty) {
+        return _playlists;
+      } else {
+        final List<Playlist> pl = [];
+        final snap = await firestoreInstance
+            .collection('Playlists')
+            .document(email)
+            .collection('Playlists')
+            .getDocuments();
+        snap.documents.forEach((element) {
+          int imgId = rng.nextInt(6) + 1;
+          List<dynamic> val = element['songId'];
+          List<String> newSong = [];
+          for (int i = 0; i < val.length; i++) {
+            newSong.add(val[i]);
+          }
+          print(element['playlistId']);
+          pl.add(
+            Playlist(
+              playlistId: element['playlistId'],
+              playlistName: element['playlistName'],
+              songId: newSong,
+              imageUrl: 'assets/resources/pl${imgId.toString()}.jpg',
+            ),
+          );
+        });
+        _playlists = pl;
+        print(_playlists.length);
+        return _playlists;
+      }
     }
   }
 
-  Future<void> deletePlayList({String playlistId}) {
+  Future<void> deletePlayList({String email, String playlistId}) {
     int playListIndex =
         _playlists.indexWhere((pl) => pl.playlistId == playlistId);
     var playlist = _playlists[playListIndex];
@@ -94,7 +113,12 @@ class Playlists with ChangeNotifier {
     notifyListeners();
 
     try {
-      firestoreInstance.collection('playlists').document(playlistId).delete();
+      firestoreInstance
+          .collection('Playlists')
+          .document(email)
+          .collection('Playlists')
+          .document(playlistId)
+          .delete();
       playlist = null;
     } catch (error) {
       _playlists.insert(playListIndex, playlist);

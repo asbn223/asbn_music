@@ -45,9 +45,11 @@ dependencies:
   #For getting dir
   path: ^1.6.0
   path_provider: ^1.6.11
+
+  #for Firebase Auth
+  firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.4+2
 
-  #For animations
 
 dev_dependencies:
   flutter_test:
