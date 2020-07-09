@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flare_splash_screen/flare_splash_screen.dart' as SS;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
@@ -108,8 +109,44 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: isLoggedIn ? HomeScreen() : LoginScreen(),
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: size.height / 2,
+              width: double.infinity,
+              color: Color(0xFF08315E),
+              child: Image.asset(
+                'assets/resources/logo2.png',
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: size.height / 2,
+                width: double.infinity,
+                child: SS.SplashScreen.navigate(
+                  name: 'assets/Loading.flr',
+                  backgroundColor: Color(0xFF08315E),
+//                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  startAnimation: 'Alarm',
+                  loopAnimation: 'Alarm',
+                  until: () => Future.delayed(
+                    Duration(seconds: 3),
+                  ),
+                  alignment: Alignment.center,
+                  next: (_) => isLoggedIn ? HomeScreen() : LoginScreen(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

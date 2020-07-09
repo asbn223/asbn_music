@@ -36,27 +36,33 @@ class Users with ChangeNotifier {
   }
 
   //Creating user for the music app
-  Future<void> createUser({String name, String password, String email}) async {
+  Future<AuthResult> createUser(
+      {String name, String password, String email}) async {
     try {
       final registerUser = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await firestoreInstance.collection('Users').add({
-        'name': name,
-        'password': password,
-        'email': email,
-      });
-      final prefs = await SharedPreferences.getInstance();
-      final userData = json.encode({
-        'email': email,
-      });
+      if (registerUser != null) {
+        await firestoreInstance.collection('Users').add({
+          'name': name,
+          'password': password,
+          'email': email,
+        });
+        final prefs = await SharedPreferences.getInstance();
+        final userData = json.encode({
+          'email': email,
+        });
 
-      prefs.setString('userData', userData);
-      User user = User(
-        name: name,
-        email: email,
-        password: password,
-      );
-      _user.add(user);
+        prefs.setString('userData', userData);
+        User user = User(
+          name: name,
+          email: email,
+          password: password,
+        );
+        _user.add(user);
+        return registerUser;
+      } else {
+        return null;
+      }
     } catch (error) {
       throw (error);
     }
@@ -104,14 +110,20 @@ class Users with ChangeNotifier {
   }
 
   //Login the user in the app
-  Future<void> login({String email, String password}) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
-    final prefs = await SharedPreferences.getInstance();
-    final userData = json.encode({
-      'email': email,
-    });
+  Future<AuthResult> login({String email, String password}) async {
+    final user = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+    if (user != null) {
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'email': email,
+      });
 
-    prefs.setString('userData', userData);
+      prefs.setString('userData', userData);
+      return user;
+    } else {
+      return null;
+    }
   }
 
   //Login

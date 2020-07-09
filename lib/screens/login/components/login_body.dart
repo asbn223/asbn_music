@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
@@ -5,6 +6,8 @@ import 'package:musicplayer/widgets/account_check.dart';
 import 'package:musicplayer/widgets/rounded_button.dart';
 import 'package:musicplayer/widgets/textfield_container.dart';
 import 'package:provider/provider.dart';
+
+enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 
 class LoginBody extends StatelessWidget {
   String email, password;
@@ -66,16 +69,49 @@ class LoginBody extends StatelessWidget {
             color: Color(0xFFFF7F50),
             text: 'Sign In',
             textColor: Color(0xFFFFFFFF),
-            press: () {
+            press: () async {
               if (email != null) {
                 if (email.contains('@')) {
                   if (password != null) {
                     if (password.length >= 8) {
-                      users.login(
-                        email: email.trim(),
-                        password: password.trim(),
-                      );
-                      Navigator.pushNamed(context, HomeScreen.routeName);
+                      try {
+                        AuthResult logUser = await users.login(
+                          email: email.trim(),
+                          password: password,
+                        );
+                        if (logUser != null) {
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        }
+                      } catch (error) {
+                        String errorMessage;
+                        switch (error.code) {
+                          case "ERROR_INVALID_EMAIL":
+                            errorMessage = "Your email address is invalid.";
+                            break;
+                          case "ERROR_WRONG_PASSWORD":
+                            errorMessage = "Your password is wrong.";
+                            break;
+                          case "ERROR_USER_NOT_FOUND":
+                            errorMessage =
+                                "User with this email doesn't exist.";
+                            break;
+                          case "ERROR_USER_DISABLED":
+                            errorMessage =
+                                "User with this email has been disabled.";
+                            break;
+                          case "ERROR_TOO_MANY_REQUESTS":
+                            errorMessage =
+                                "Too many requests. Try again later.";
+                            break;
+                          case "ERROR_OPERATION_NOT_ALLOWED":
+                            errorMessage =
+                                "Signing in with Email and Password is not enabled.";
+                            break;
+                          default:
+                            errorMessage = "An undefined Error happened.";
+                        }
+                        _showDialog(context, message: errorMessage);
+                      }
                     } else {
                       _showDialog(context,
                           message:
