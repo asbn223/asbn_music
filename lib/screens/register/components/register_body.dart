@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
+import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/widgets/account_check.dart';
 import 'package:musicplayer/widgets/rounded_button.dart';
 import 'package:musicplayer/widgets/textfield_container.dart';
@@ -91,10 +92,11 @@ class RegisterBody extends StatelessWidget {
                         if (password != null) {
                           if (password.length >= 8) {
                             users.createUser(
-                              name: name,
-                              email: email,
+                              name: name.trim(),
+                              email: email.trim(),
                               password: password,
                             );
+                            Navigator.pushNamed(context, HomeScreen.routeName);
                           } else {
                             _showDialog(context,
                                 message:

@@ -49,7 +49,7 @@ dependencies:
   #for Firebase Auth
   firebase_auth: ^0.16.1
   cloud_firestore: ^0.13.4+2
-
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:

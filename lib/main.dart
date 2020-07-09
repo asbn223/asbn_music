@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Color(0xFF341F97),
                 accentColor: Color(0xFFFAB1A0),
               ),
-        home: LoginScreen(),
+        home: SplashScreen(),
         routes: {
           AddInScreen.routeName: (context) => AddInScreen(),
           AllSongsScreen.routeName: (context) => AllSongsScreen(),
@@ -80,6 +80,36 @@ class _MyAppState extends State<MyApp> {
 //          NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
         },
       ),
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool isInit = true;
+  bool isLoggedIn = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isInit) {
+      checkLogin();
+    }
+    isInit = false;
+  }
+
+  void checkLogin() async {
+    isLoggedIn = await Provider.of<Users>(context, listen: false).autoLogin();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: isLoggedIn ? HomeScreen() : LoginScreen(),
     );
   }
 }
