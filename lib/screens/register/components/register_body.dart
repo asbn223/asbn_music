@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
@@ -93,14 +94,24 @@ class RegisterBody extends StatelessWidget {
                         if (password != null) {
                           if (password.length >= 8) {
                             try {
-                              AuthResult regUser = await users.createUser(
-                                name: name.trim(),
-                                email: email.trim(),
-                                password: password,
-                              );
-                              if (regUser != null) {
-                                Navigator.pushNamed(
-                                    context, HomeScreen.routeName);
+                              var connectionResult =
+                                  await (Connectivity().checkConnectivity());
+                              if (connectionResult == ConnectivityResult.wifi ||
+                                  connectionResult ==
+                                      ConnectivityResult.mobile) {
+                                AuthResult regUser = await users.createUser(
+                                  name: name.trim(),
+                                  email: email.trim(),
+                                  password: password,
+                                );
+                                if (regUser != null) {
+                                  Navigator.pushReplacementNamed(
+                                      context, HomeScreen.routeName);
+                                }
+                              } else {
+                                _showDialog(context,
+                                    message:
+                                        "There is no internet connection.");
                               }
                             } catch (error) {
                               String errorMessage;

@@ -60,7 +60,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             color: Colors.purpleAccent,
             onTap: () {
               user.logout();
-              Navigator.pushNamed(context, LoginScreen.routeName);
+              Navigator.pushReplacementNamed(context, LoginScreen.routeName);
             }),
         Divider(
           color: Color(0xFF808080),

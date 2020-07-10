@@ -38,6 +38,7 @@ class _AddToBodyState extends State<AddToBody> {
                             onPressed: () {
 //                      playlists.fetchData();
                               playlists.updateData(
+                                email: user[0].email,
                                 id: playlists.playlists[index].playlistId,
                                 songId: songId,
                                 song: playlists.playlists[index].songId,
@@ -46,6 +47,7 @@ class _AddToBodyState extends State<AddToBody> {
                           ),
                           onTap: () {
                             playlists.updateData(
+                              email: user[0].email,
                               id: playlists.playlists[index].playlistId,
                               songId: songId,
                               song: playlists.playlists[index].songId,

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
@@ -76,6 +77,7 @@ class Users with ChangeNotifier {
         return;
       }
       final currentUser = await _auth.currentUser();
+      print(currentUser.email);
       if (currentUser == null) {
         final prefs = await SharedPreferences.getInstance();
         final extractedDate =
@@ -129,6 +131,9 @@ class Users with ChangeNotifier {
   //Login
   Future<void> logout() async {
     await _auth.signOut();
+
+    _user.clear();
+    Playlists.clearPlaylist();
     //    Clear Data in Shared Preferencs value
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();

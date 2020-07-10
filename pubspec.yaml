@@ -53,6 +53,8 @@ dependencies:
   cloud_firestore: ^0.13.4+2
   shared_preferences: ^0.5.8
 
+  connectivity: ^0.4.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

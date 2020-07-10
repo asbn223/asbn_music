@@ -6,7 +6,7 @@ import 'package:musicplayer/models/playlist.dart';
 
 class Playlists with ChangeNotifier {
   final firestoreInstance = Firestore.instance;
-  List<Playlist> _playlists = [];
+  static List<Playlist> _playlists = [];
   var rng = new Random();
 
   List<Playlist> get playlists {
@@ -59,13 +59,14 @@ class Playlists with ChangeNotifier {
     if (songId != null) {
       song.add(songId);
     }
+    print(id);
     await firestoreInstance
         .collection("Playlists")
         .document(email)
         .collection("Playlists")
         .document(id)
         .updateData({
-      'playListId': id,
+      'playlistId': id,
       'songId': song,
     });
   }
@@ -82,6 +83,9 @@ class Playlists with ChangeNotifier {
             .collection('Playlists')
             .getDocuments();
         snap.documents.forEach((element) {
+          print(element['songId']);
+          print(element['playlistId']);
+          print(element['playlistName']);
           int imgId = rng.nextInt(6) + 1;
           List<dynamic> val = element['songId'];
           List<String> newSong = [];
@@ -125,5 +129,9 @@ class Playlists with ChangeNotifier {
       notifyListeners();
       throw (error);
     }
+  }
+
+  static clearPlaylist() {
+    _playlists.clear();
   }
 }
