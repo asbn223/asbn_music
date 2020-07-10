@@ -15,7 +15,6 @@ class _AddToBodyState extends State<AddToBody> {
     final playlists = Provider.of<Playlists>(context, listen: false);
     final songId = ModalRoute.of(context).settings.arguments as String;
     final user = Provider.of<Users>(context, listen: false).user;
-    print(songId);
     return Container(
       height: size.height,
       width: double.infinity,

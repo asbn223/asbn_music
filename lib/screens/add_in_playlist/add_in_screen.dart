@@ -10,6 +10,7 @@ class AddInScreen extends StatelessWidget {
   static String routeName = '/add_in_screen';
   TextEditingController _controller = TextEditingController();
 
+  //Show dialog with textfield
   void _showDialog({BuildContext context, Function onPressed}) {
     showDialog(
         context: context,

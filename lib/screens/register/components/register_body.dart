@@ -96,6 +96,8 @@ class RegisterBody extends StatelessWidget {
                             try {
                               var connectionResult =
                                   await (Connectivity().checkConnectivity());
+                              //Check if user is connected with internet
+
                               if (connectionResult == ConnectivityResult.wifi ||
                                   connectionResult ==
                                       ConnectivityResult.mobile) {

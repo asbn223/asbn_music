@@ -5,6 +5,8 @@ import 'package:musicplayer/screens/register/register_screen.dart';
 class AccountCheck extends StatelessWidget {
   final bool login;
   AccountCheck(this.login);
+
+  //Check if the user is in login page or register page
   @override
   Widget build(BuildContext context) {
     return Row(

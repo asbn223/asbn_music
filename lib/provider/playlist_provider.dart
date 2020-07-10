@@ -13,6 +13,7 @@ class Playlists with ChangeNotifier {
     return [..._playlists];
   }
 
+  //Adding playlist for particular user
   Future<void> addInPlayList(
       {String email, String playlistId, String playName, String songId}) async {
     int playListIndex =
@@ -54,6 +55,7 @@ class Playlists with ChangeNotifier {
     }
   }
 
+  //Updating the playlist for particular user
   Future<void> updateData(
       {String email, String id, String songId, List<String> song}) async {
     if (songId != null) {
@@ -71,6 +73,7 @@ class Playlists with ChangeNotifier {
     });
   }
 
+  //Fetching the playlist data
   Future<List<Playlist>> fetchData({String email}) async {
     if (email.isNotEmpty) {
       if (_playlists.isNotEmpty) {
@@ -109,6 +112,7 @@ class Playlists with ChangeNotifier {
     }
   }
 
+  //Deleting the playlist
   Future<void> deletePlayList({String email, String playlistId}) {
     int playListIndex =
         _playlists.indexWhere((pl) => pl.playlistId == playlistId);
@@ -131,6 +135,7 @@ class Playlists with ChangeNotifier {
     }
   }
 
+  //Clearing the playlist
   static clearPlaylist() {
     _playlists.clear();
   }

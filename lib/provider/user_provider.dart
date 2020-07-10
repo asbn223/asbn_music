@@ -28,14 +28,6 @@ class Users with ChangeNotifier {
     return [..._user];
   }
 
-  String get userEmail {
-    if (email.isEmpty) {
-      return "";
-    } else {
-      return email;
-    }
-  }
-
   //Creating user for the music app
   Future<AuthResult> createUser(
       {String name, String password, String email}) async {
@@ -128,7 +120,7 @@ class Users with ChangeNotifier {
     }
   }
 
-  //Login
+  //Logout from the app
   Future<void> logout() async {
     await _auth.signOut();
 

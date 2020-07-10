@@ -13,6 +13,7 @@ enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 class LoginBody extends StatelessWidget {
   String email, password;
 
+  //Show error message in dialog box
   void _showDialog(BuildContext context, {String message}) {
     showDialog(
         context: context,
@@ -78,6 +79,7 @@ class LoginBody extends StatelessWidget {
                       try {
                         var connectionResult =
                             await (Connectivity().checkConnectivity());
+                        //Check if user is connected with internet
                         if (connectionResult == ConnectivityResult.wifi ||
                             connectionResult == ConnectivityResult.mobile) {
                           AuthResult logUser = await users.login(

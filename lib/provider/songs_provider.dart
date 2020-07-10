@@ -12,6 +12,7 @@ class Songs with ChangeNotifier {
     return [..._songs];
   }
 
+  //Getting songs from the storage of phone
   static FlutterAudioQuery audioQuery = FlutterAudioQuery();
   var rng = new Random();
   Future<List<Song>> getSongs() async {
@@ -102,16 +103,20 @@ class Songs with ChangeNotifier {
 //    );
 //  }
 
+  //Getting AudioPlayer Instance
   static AudioPlayer audioPlayer = AudioPlayer();
 
+  //Playing the songs
   static void playSong(String fileName) {
     audioPlayer.play(fileName, isLocal: true);
   }
 
+  //Pausing currently playing song
   static void pauseSong() {
     audioPlayer.pause();
   }
 
+  //Resuming currently paused song
   static void resumeSong() {
     audioPlayer.resume();
   }
