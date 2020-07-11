@@ -1,9 +1,12 @@
 import 'package:floating_menu/floating_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/components/home_body.dart';
+import 'package:musicplayer/screens/now_playing3/now_playing_screen3.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final songs = Provider.of<Songs>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -73,7 +77,22 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icons.shuffle,
             size: Size(45, 45),
             onPress: () {
-              print("File");
+              songs.shuffleSongs();
+              final song = songs.shuffledSongs.first;
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return NowPlayingScreen3(
+                    songId: song.id,
+                  );
+                }),
+              );
+              Songs.playSong(song.songFile);
+              MediaNotification.showNotification(
+                title: song.songName,
+                author: song.artist,
+                isPlaying: true,
+              );
             },
           ),
         ],

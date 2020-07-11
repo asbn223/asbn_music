@@ -44,6 +44,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
           color: Colors.amber,
           onTap: () => Navigator.pushNamed(context, AllSongsScreen.routeName),
         ),
+        CustomDrawerItems(
+          title: "Favourites",
+          icon: Icons.favorite,
+          color: Colors.red,
+          onTap: () => null,
+        ),
         Divider(
           color: Color(0xFF808080),
           thickness: 1.5,

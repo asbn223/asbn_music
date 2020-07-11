@@ -4,6 +4,7 @@ import 'package:flare_splash_screen/flare_splash_screen.dart' as SS;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
+import 'package:musicplayer/provider/setting_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
@@ -23,20 +24,7 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false;
-
-  void toggleDarkMode() {
-    setState(() {
-      isDarkMode = !isDarkMode;
-    });
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -50,37 +38,48 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<Users>(
           create: (_) => Users(),
         ),
+        ChangeNotifierProvider<Settings>(
+          create: (_) => Settings(),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Music Player",
-        theme: isDarkMode
-            ? ThemeData.dark().copyWith(
-                appBarTheme: AppBarTheme(color: Colors.black),
-                textTheme: TextTheme(
-                  body1: TextStyle(color: Colors.black),
-                  caption: TextStyle(color: Colors.white),
-                ),
-                accentColor: Color(0xFFFAB1A0),
-              )
-            : ThemeData(
-                primaryColor: Color(0xFF341F97),
-                accentColor: Color(0xFFFAB1A0),
-              ),
-        home: SplashScreen(),
-        routes: {
-          AddInScreen.routeName: (context) => AddInScreen(),
-          AllSongsScreen.routeName: (context) => AllSongsScreen(),
-          HomeScreen.routeName: (context) => HomeScreen(),
-          PlaylistScreen.routeName: (context) => PlaylistScreen(),
-          LoginScreen.routeName: (context) => LoginScreen(),
-          RegisterScreen.routeName: (context) => RegisterScreen(),
-          SettingsScreen.routeName: (context) =>
-              SettingsScreen(isDarkMode, toggleDarkMode),
+      child: HomeApp(),
+    );
+  }
+}
+
+class HomeApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Settings>(
+      builder: (BuildContext context, Settings settings, Widget child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Music Player",
+          theme: ThemeData.light().copyWith(
+              primaryColor: Color(0xFF341F97), accentColor: Color(0xFFFAB1A0)),
+          darkTheme: ThemeData.dark().copyWith(
+            appBarTheme: AppBarTheme(color: Colors.black),
+            textTheme: TextTheme(
+              body1: TextStyle(color: Colors.black),
+              caption: TextStyle(color: Colors.white),
+            ),
+            accentColor: Color(0xFFFAB1A0),
+          ),
+          themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          home: SplashScreen(),
+          routes: {
+            AddInScreen.routeName: (context) => AddInScreen(),
+            AllSongsScreen.routeName: (context) => AllSongsScreen(),
+            HomeScreen.routeName: (context) => HomeScreen(),
+            PlaylistScreen.routeName: (context) => PlaylistScreen(),
+            LoginScreen.routeName: (context) => LoginScreen(),
+            RegisterScreen.routeName: (context) => RegisterScreen(),
+            SettingsScreen.routeName: (context) => SettingsScreen(),
 //          SongListScreen.routeName: (context) => SongListScreen(),
 //          NowPlayingScreen.routeName: (context) => NowPlayingScreen(),
-        },
-      ),
+          },
+        );
+      },
     );
   }
 }
@@ -105,6 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkLogin() async {
     isLoggedIn = await Provider.of<Users>(context, listen: false).autoLogin();
+    await Provider.of<Settings>(context, listen: false).fetchDarkMode();
   }
 
   @override

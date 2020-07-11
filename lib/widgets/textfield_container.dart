@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:musicplayer/provider/setting_provider.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class TextFieldContainer extends StatefulWidget {
@@ -27,6 +30,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final settings = Provider.of<Settings>(context, listen: false);
     return Container(
       margin: EdgeInsets.symmetric(vertical: widget.margin),
       padding: EdgeInsets.symmetric(
@@ -36,7 +40,11 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
       width: size.width * 0.8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(29),
-        color: Color(0xFFDFE4EA),
+        border: Border.all(
+          style: BorderStyle.solid,
+          color: settings.isDarkMode ? Color(0xFFFFFFFF) : Color(0xFF000000),
+        ),
+        color: settings.isDarkMode ? Color(0xFF000000) : Color(0xFFDFE4EA),
       ),
       child: TextField(
         obscureText: widget.obscureText,

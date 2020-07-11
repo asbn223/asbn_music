@@ -7,9 +7,14 @@ import 'package:musicplayer/models/song.dart';
 
 class Songs with ChangeNotifier {
   List<Song> _songs = [];
+  List<Song> _shuffledSongs = [];
 
   List<Song> get songs {
     return [..._songs];
+  }
+
+  List<Song> get shuffledSongs {
+    return [..._shuffledSongs];
   }
 
   //Getting songs from the storage of phone
@@ -44,64 +49,15 @@ class Songs with ChangeNotifier {
     }
   }
 
-//  final AssetsAudioPlayer aap = AssetsAudioPlayer();
-//
-//  void openSong({
-//    String songFile,
-//    String id,
-//    String songName,
-//    String artist,
-//    String album,
-//  }) {
-//    aap.stop();
-//    aap.open(
-//      Audio.file(
-//        songFile,
-//        metas: Metas(
-//          id: id,
-//          title: songName,
-//          artist: artist,
-//          album: album,
-//        ),
-//      ),
-//      showNotification: true,
-//    );
-//    aap.play();
-//  }
-//
-//  void playSong() {
-//    aap.play();
-//  }
-//
-//  void pauseSong() {
-//    aap.pause();
-//  }
-//
-//  void nextSong(int index) {
-//    if (index <= 0) {
-//      return;
-//    }
-//    openSong(
-//      songFile: _songs[index].songFile,
-//      id: _songs[index].id,
-//      songName: _songs[index].songName,
-//      artist: _songs[index].artist,
-//      album: _songs[index].album,
-//    );
-//  }
-//
-//  void prevSong(int index) {
-//    if (index <= 0) {
-//      return;
-//    }
-//    openSong(
-//      songFile: _songs[index].songFile,
-//      id: _songs[index].id,
-//      songName: _songs[index].songName,
-//      artist: _songs[index].artist,
-//      album: _songs[index].album,
-//    );
-//  }
+  Future<void> shuffleSongs() {
+    var random = Random();
+    _shuffledSongs.clear();
+
+    for (int k = _songs.length - 1; k > 0; k--) {
+      int n = random.nextInt(k + 1);
+      _shuffledSongs.add(_songs[n]);
+    }
+  }
 
   //Getting AudioPlayer Instance
   static AudioPlayer audioPlayer = AudioPlayer();

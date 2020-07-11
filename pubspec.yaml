@@ -36,6 +36,7 @@ dependencies:
   clay_containers: ^0.2.2
   floating_menu: ^0.1.0+hotfix.1
   neuomorphic_container: ^2.0.3
+  flare_flutter: ^2.0.5
 
   #For Audio Players
   flutter_audio_query: ^0.3.4+2
@@ -53,6 +54,7 @@ dependencies:
   cloud_firestore: ^0.13.4+2
   shared_preferences: ^0.5.8
 
+  #For checking connection
   connectivity: ^0.4.9
 
 dev_dependencies:

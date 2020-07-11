@@ -7,6 +7,7 @@ import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
+import 'package:musicplayer/screens/shuffled_songs/shuffled_songs_screen.dart';
 import 'package:musicplayer/widgets/clay_button.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:neuomorphic_container/neuomorphic_container.dart';
@@ -15,17 +16,17 @@ import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 
-class NowPlayingScreen extends StatefulWidget {
-  static String routeName = '/now_playing_screen';
+class NowPlayingScreen3 extends StatefulWidget {
+  static String routeName = '/now_playing_screen3';
 
   String songId;
-  NowPlayingScreen({this.songId});
+  NowPlayingScreen3({this.songId});
 
   @override
-  _NowPlayingScreenState createState() => _NowPlayingScreenState();
+  _NowPlayingScreen3State createState() => _NowPlayingScreen3State();
 }
 
-class _NowPlayingScreenState extends State<NowPlayingScreen> {
+class _NowPlayingScreen3State extends State<NowPlayingScreen3> {
   bool isPlaylistOpened = false;
   final CountdownController countdownController = CountdownController();
   String status = 'hidden';
@@ -83,7 +84,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       });
     }
     Songs songs = Provider.of(context, listen: false);
-    Song song = songs.songs.firstWhere((song) => song.id == widget.songId);
+    Song song = songs.shuffledSongs.firstWhere((song) => song.id == widget.songId);
     Songs.playSong(song.songFile);
 
     MediaNotification.showNotification(
@@ -106,7 +107,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
       }
     }
     Songs songs = Provider.of(context, listen: false);
-    Song song = songs.songs.firstWhere((song) => song.id == widget.songId);
+    Song song = songs.shuffledSongs.firstWhere((song) => song.id == widget.songId);
     Songs.playSong(song.songFile);
     MediaNotification.showNotification(
       title: song.songName,
@@ -188,8 +189,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     Songs songs = Provider.of<Songs>(context, listen: false);
-    Song song = songs.songs.firstWhere((music) => music.id == widget.songId);
-    int songIndex = songs.songs.indexOf(song);
+    Song song = songs.shuffledSongs.firstWhere((music) => music.id == widget.songId);
+    int songIndex = songs.shuffledSongs.indexOf(song);
     String songDuration = song.duration;
     return Scaffold(
       body: SafeArea(
@@ -258,13 +259,14 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                             if (songIndex < 0) {
                               return;
                             }
-                            widget.songId = songs.songs[songIndex - 1].id;
-                            song = songs.songs.firstWhere(
+                            widget.songId = songs.shuffledSongs[songIndex - 1].id;
+                            song = songs.shuffledSongs.firstWhere(
                                 (music) => music.id == widget.songId);
-                            songIndex = songs.songs.indexOf(song);
+                            songIndex = songs.shuffledSongs.indexOf(song);
                           });
 //                          countdownController.restart();
                           prevSong();
+
                         },
                         color: Color(0xFF4B4B4B),
                         iconColor: Color(0xFFFFFFFF),
@@ -279,13 +281,13 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 //                          songs.nextSong(songIndex + 1);
                           setState(() {
                             if (songIndex < 0 ||
-                                songIndex > songs.songs.length) {
+                                songIndex > songs.shuffledSongs.length) {
                               return;
                             }
-                            widget.songId = songs.songs[songIndex + 1].id;
-                            song = songs.songs.firstWhere(
+                            widget.songId = songs.shuffledSongs[songIndex + 1].id;
+                            song = songs.shuffledSongs.firstWhere(
                                 (music) => music.id == widget.songId);
-                            songIndex = songs.songs.indexOf(song);
+                            songIndex = songs.shuffledSongs.indexOf(song);
                           });
                           nextSong();
                         },
@@ -446,7 +448,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AllSongsScreen(),
+                              builder: (context) => ShuffledSongs(),
                             ),
                           );
                         },

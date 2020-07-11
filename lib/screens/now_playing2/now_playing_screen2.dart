@@ -7,7 +7,7 @@ import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
-import 'package:musicplayer/screens/now_playing2/components/clay_button.dart';
+import 'file:///C:/Users/ASBN/StudioProjects/asbn_music/lib/widgets/clay_button.dart';
 import 'package:musicplayer/screens/play_queue/play_queue_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
 import 'package:neuomorphic_container/neuomorphic_container.dart';
