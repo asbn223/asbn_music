@@ -8,12 +8,15 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
-  final String name, password, email;
+  final String name, password, email, imgFile;
+  final List<String> hobbies;
 
   User({
     @required this.name,
     @required this.email,
     @required this.password,
+    this.imgFile,
+    this.hobbies,
   });
 }
 
@@ -30,7 +33,11 @@ class Users with ChangeNotifier {
 
   //Creating user for the music app
   Future<AuthResult> createUser(
-      {String name, String password, String email}) async {
+      {String name,
+      String password,
+      String email,
+      String imgFile,
+      List<String> hobbies}) async {
     try {
       final registerUser = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -39,6 +46,8 @@ class Users with ChangeNotifier {
           'name': name,
           'password': password,
           'email': email,
+          'imgFile': imgFile,
+          'hobbies': hobbies,
         });
         final prefs = await SharedPreferences.getInstance();
         final userData = json.encode({
@@ -77,10 +86,17 @@ class Users with ChangeNotifier {
         email = extractedDate['email'];
         for (int i = 0; i < userData.documents.length; i++) {
           if (userData.documents[i]['email'] == email) {
+            List<dynamic> val = userData.documents[i]['hobbies'];
+            List<String> hobbies = [];
+            for (int j = 0; j < val.length; j++) {
+              hobbies.add(val[j]);
+            }
             User user = User(
               name: userData.documents[i]['name'],
               email: userData.documents[i]['email'],
               password: userData.documents[i]['password'],
+              imgFile: userData.documents[i]['password'],
+              hobbies: hobbies,
             );
             _user.add(user);
           }
@@ -89,10 +105,17 @@ class Users with ChangeNotifier {
         userData = await firestoreInstance.collection('Users').getDocuments();
         for (int i = 0; i < userData.documents.length; i++) {
           if (userData.documents[i]['email'] == currentUser.email) {
+            List<dynamic> val = userData.documents[i]['hobbies'];
+            List<String> hobbies = [];
+            for (int j = 0; j < val.length; j++) {
+              hobbies.add(val[j]);
+            }
             User user = User(
               name: userData.documents[i]['name'],
               email: userData.documents[i]['email'],
               password: userData.documents[i]['password'],
+              imgFile: userData.documents[i]['password'],
+              hobbies: hobbies,
             );
             _user.add(user);
           }

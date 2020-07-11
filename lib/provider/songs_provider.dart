@@ -49,6 +49,7 @@ class Songs with ChangeNotifier {
     }
   }
 
+  //Shuffle the songs
   Future<void> shuffleSongs() {
     var random = Random();
     _shuffledSongs.clear();

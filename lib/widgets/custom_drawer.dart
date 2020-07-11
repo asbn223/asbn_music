@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
@@ -20,6 +22,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return ListView(
       children: <Widget>[
         UserAccountsDrawerHeader(
+          currentAccountPicture: CircleAvatar(
+            radius: 50,
+            backgroundImage: FileImage(
+              File(user.user[0].imgFile),
+            ),
+          ),
           accountEmail: Text(user.user[0].email),
           accountName: Text(user.user[0].name),
         ),

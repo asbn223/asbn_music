@@ -37,6 +37,8 @@ dependencies:
   floating_menu: ^0.1.0+hotfix.1
   neuomorphic_container: ^2.0.3
   flare_flutter: ^2.0.5
+  font_awesome_flutter: ^8.8.1
+  image_picker: ^0.6.7+4
 
   #For Audio Players
   flutter_audio_query: ^0.3.4+2

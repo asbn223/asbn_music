@@ -1,7 +1,9 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/setting_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -29,6 +31,8 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
+    final playlists = Provider.of<Playlists>(context, listen: false);
+    final user = Provider.of<Users>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
@@ -65,6 +69,8 @@ class SettingsScreen extends StatelessWidget {
                     label("Playlist"),
                     ListTile(
                       title: Text("Delete All Playlist"),
+                      onTap: () => playlists.deleteAllPlaylist(
+                          email: user.user[0].email),
                     ),
                     Divider(
                       thickness: 1.5,

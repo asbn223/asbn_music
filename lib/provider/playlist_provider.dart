@@ -95,7 +95,6 @@ class Playlists with ChangeNotifier {
           for (int i = 0; i < val.length; i++) {
             newSong.add(val[i]);
           }
-          print(element['playlistId']);
           pl.add(
             Playlist(
               playlistId: element['playlistId'],
@@ -113,7 +112,7 @@ class Playlists with ChangeNotifier {
   }
 
   //Deleting the playlist
-  Future<void> deletePlayList({String email, String playlistId}) {
+  Future<void> deletePlayList({String email, String playlistId}) async {
     int playListIndex =
         _playlists.indexWhere((pl) => pl.playlistId == playlistId);
     var playlist = _playlists[playListIndex];
@@ -121,7 +120,7 @@ class Playlists with ChangeNotifier {
     notifyListeners();
 
     try {
-      firestoreInstance
+      await firestoreInstance
           .collection('Playlists')
           .document(email)
           .collection('Playlists')
@@ -130,6 +129,20 @@ class Playlists with ChangeNotifier {
       playlist = null;
     } catch (error) {
       _playlists.insert(playListIndex, playlist);
+      notifyListeners();
+      throw (error);
+    }
+  }
+
+  //Delete all the playlist
+  Future<void> deleteAllPlaylist({String email}) async {
+    var plist = _playlists;
+    try {
+      clearPlaylist();
+      await firestoreInstance.collection("Playlists").document(email).delete();
+      plist = null;
+    } catch (error) {
+      _playlists = plist;
       notifyListeners();
       throw (error);
     }
