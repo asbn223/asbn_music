@@ -12,6 +12,7 @@ import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/login/login_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
+import 'package:musicplayer/screens/profile/profile_screen.dart';
 import 'package:musicplayer/screens/register/register_screen.dart';
 import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -71,8 +72,9 @@ class HomeApp extends StatelessWidget {
             AddInScreen.routeName: (context) => AddInScreen(),
             AllSongsScreen.routeName: (context) => AllSongsScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
-            PlaylistScreen.routeName: (context) => PlaylistScreen(),
             LoginScreen.routeName: (context) => LoginScreen(),
+            PlaylistScreen.routeName: (context) => PlaylistScreen(),
+            ProfileScreen.routeName: (context) => ProfileScreen(),
             RegisterScreen.routeName: (context) => RegisterScreen(),
             SettingsScreen.routeName: (context) => SettingsScreen(),
 //          SongListScreen.routeName: (context) => SongListScreen(),

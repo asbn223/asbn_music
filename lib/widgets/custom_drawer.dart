@@ -6,6 +6,7 @@ import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/login/login_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
+import 'package:musicplayer/screens/profile/profile_screen.dart';
 import 'package:musicplayer/screens/settings/settings_screen.dart';
 import 'package:musicplayer/widgets/custom_drawer_items.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +23,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return ListView(
       children: <Widget>[
         UserAccountsDrawerHeader(
-          currentAccountPicture: CircleAvatar(
-            radius: 50,
-            backgroundImage: FileImage(
-              File(user.user[0].imgFile),
+          currentAccountPicture: GestureDetector(
+            onTap: () => Navigator.pushNamed(context, ProfileScreen.routeName),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: FileImage(
+                File(user.user[0].imgFile),
+              ),
             ),
           ),
           accountEmail: Text(user.user[0].email),

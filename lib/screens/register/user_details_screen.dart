@@ -1,20 +1,19 @@
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/widgets/rounded_button.dart';
 import 'package:provider/provider.dart';
-//import 'package:image_picker/image_picker.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   final String name, email, password;
 
-  static String routeName = '/user_details_screen';
+//  static String routeName = '/user_details_screen';
 
   UserDetailsScreen({this.name, this.email, this.password});
   @override
@@ -22,32 +21,22 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
-  Map<String, IconData> _listHobbies = {
-    'Reading': FontAwesomeIcons.book,
-    'Travelling': FontAwesomeIcons.walking,
-    'Collecting': FontAwesomeIcons.table,
-    'Listen to Music': FontAwesomeIcons.headphones,
-    'Playing Games': FontAwesomeIcons.gamepad,
-    'Dancing': FontAwesomeIcons.signLanguage,
-    'Photography': FontAwesomeIcons.camera,
-  };
 
-  final ImagePicker _picker = ImagePicker();
-  PickedFile _image;
 
   String dropdownValue = 'Reading';
   String dropdownValue2;
+  File _filePicked;
+  File _imagePicked;
 
-  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
+  void openExplorer() async {
     try {
-      final pickedFile = await _picker.getImage(
-        source: source,
-      );
+      _filePicked = await FilePicker.getFile(type: FileType.image);
       setState(() {
-        _image = pickedFile;
+        _imagePicked = _filePicked;
       });
-    } catch (e) {
-      throw (e);
+      print(_imagePicked);
+    } catch (error) {
+      throw (error);
     }
   }
 
@@ -101,20 +90,21 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             width: 1.5,
                           ),
                         ),
-                        child: _image == null
+                        child: _imagePicked == null
                             ? Center(
                                 child: Text("Image is not selected"),
                               )
                             : Image.file(
-                                File(_image.path),
+                                _imagePicked,
                                 fit: BoxFit.cover,
                               ),
                       ),
                       FlatButton.icon(
-                        onPressed: () => _onImageButtonPressed(
-                          ImageSource.gallery,
-                          context: context,
-                        ),
+//                        onPressed: () => _onImageButtonPressed(
+//                          ImageSource.gallery,
+//                          context: context,
+//                        ),
+                        onPressed: () => openExplorer(),
                         icon: Icon(FontAwesomeIcons.image),
                         label: Text("Pick an Image"),
                       )
@@ -223,7 +213,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                       name: widget.name.trim(),
                                       email: widget.email.trim(),
                                       password: widget.password,
-                                      imgFile: _image.path,
+                                      imgFile: _imagePicked.path.toString(),
                                       hobbies: [dropdownValue, dropdownValue2],
                                     );
                                     if (regUser != null) {

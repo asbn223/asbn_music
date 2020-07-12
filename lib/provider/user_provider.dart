@@ -8,10 +8,11 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
-  final String name, password, email, imgFile;
+  final String id, name, password, email, imgFile;
   final List<String> hobbies;
 
   User({
+    @required this.id,
     @required this.name,
     @required this.email,
     @required this.password,
@@ -114,7 +115,7 @@ class Users with ChangeNotifier {
               name: userData.documents[i]['name'],
               email: userData.documents[i]['email'],
               password: userData.documents[i]['password'],
-              imgFile: userData.documents[i]['password'],
+              imgFile: userData.documents[i]['imgFile'],
               hobbies: hobbies,
             );
             _user.add(user);
@@ -149,9 +150,10 @@ class Users with ChangeNotifier {
 
     _user.clear();
     Playlists.clearPlaylist();
-    //    Clear Data in Shared Preferencs value
+
+    //Clear Data in Shared Preferencs value
     final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    prefs.setString('userData', null);
   }
 
   //Auto-Log in
