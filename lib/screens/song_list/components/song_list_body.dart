@@ -3,15 +3,24 @@ import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/playlist.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/now_playing2/now_playing_screen2.dart';
 import 'package:provider/provider.dart';
 
-class SongListBody extends StatelessWidget {
+class SongListBody extends StatefulWidget {
+  @override
+  _SongListBodyState createState() => _SongListBodyState();
+}
+
+class _SongListBodyState extends State<SongListBody> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final pl = Provider.of<Playlist>(context, listen: false);
-    final songs = Provider.of<Songs>(context, listen: false).songs;
+    final songq = Provider.of<Songs>(context, listen: false);
+    final songs = songq.songs;
+    final user = Provider.of<Users>(context, listen: false);
+
     return Container(
       height: size.height,
       width: double.infinity,
@@ -46,6 +55,7 @@ class SongListBody extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final song =
                       songs.firstWhere((sng) => sng.id == pl.songId[index]);
+                  bool fav = song.isFav;
                   return ListTile(
                     leading: CircleAvatar(
                       child: ClipRRect(
@@ -65,9 +75,21 @@ class SongListBody extends StatelessWidget {
                       ),
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.favorite_border),
-                      color: Color(0xFFFFFFFF),
-                      onPressed: () {},
+                      icon: fav
+                          ? Icon(Icons.favorite)
+                          : Icon(Icons.favorite_border),
+                      onPressed: () {
+                        song.toggleFav();
+                        setState(() {
+                          fav = song.isFav;
+                        });
+                        print(fav);
+                        if (fav) {
+                          songq.fav(user.users[0].email, song.id);
+                        } else {
+                          songq.refav(user.users[0].email, song.id, fav);
+                        }
+                      },
                     ),
                     onTap: () {
                       Navigator.push(

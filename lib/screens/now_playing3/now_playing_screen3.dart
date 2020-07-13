@@ -5,6 +5,7 @@ import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/shuffled_songs/shuffled_songs_screen.dart';
@@ -188,10 +189,13 @@ class _NowPlayingScreen3State extends State<NowPlayingScreen3> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final user = Provider.of<Users>(context, listen: false);
     Songs songs = Provider.of<Songs>(context, listen: false);
     Song song = songs.shuffledSongs.firstWhere((music) => music.id == widget.songId);
     int songIndex = songs.shuffledSongs.indexOf(song);
     String songDuration = song.duration;
+    bool fav = song.isFav;
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -375,8 +379,22 @@ class _NowPlayingScreen3State extends State<NowPlayingScreen3> {
                       curve: Curves.easeInOut,
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
-                        icon: Icons.favorite_border,
-                        onPressed: isPlaylistOpened ? null : null,
+                        icon: fav ? Icons.favorite : Icons.favorite_border,
+                        onPressed: isPlaylistOpened
+                            ? () {
+                          song.toggleFav();
+                          setState(() {
+                            fav = song.isFav;
+                          });
+                          print(fav);
+                          if (fav) {
+                            songs.fav(user.users[0].email, song.id);
+                          } else {
+                            songs.refav(
+                                user.users[0].email, song.id, fav);
+                          }
+                        }
+                            : null,
                         color: Color(0xFFFFBE76),
                         iconColor: Color(0xFFFFFFFF),
                       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
-import 'package:musicplayer/screens/all_songs/components/all_songs_items.dart';
 import 'package:musicplayer/screens/shuffled_songs/components/shuffled_songs_items.dart';
 import 'package:provider/provider.dart';
 

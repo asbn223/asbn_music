@@ -6,6 +6,7 @@ import 'package:musicplayer/models/playlist.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'file:///C:/Users/ASBN/StudioProjects/asbn_music/lib/widgets/clay_button.dart';
 import 'package:musicplayer/screens/play_queue/play_queue_screen.dart';
@@ -195,12 +196,14 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final user = Provider.of<Users>(context, listen: false);
     var pl = Provider.of<Playlists>(context).playlists;
     Playlist play =
         pl.firstWhere((element) => element.playlistId == widget.playlistId);
     int songIndex = play.songId.indexWhere((sId) => sId == widget.songId);
     Songs songs = Provider.of<Songs>(context, listen: false);
     Song song = songs.songs.firstWhere((sng) => sng.id == widget.songId);
+    bool fav = song.isFav;
 
     return Scaffold(
       body: SafeArea(
@@ -383,8 +386,22 @@ class _NowPlayingScreen2State extends State<NowPlayingScreen2> {
                       curve: Curves.easeInOut,
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
-                        icon: Icons.favorite_border,
-                        onPressed: isPlaylistOpened ? null : null,
+                        icon: fav ? Icons.favorite : Icons.favorite_border,
+                        onPressed: isPlaylistOpened
+                            ? () {
+                          song.toggleFav();
+                          setState(() {
+                            fav = song.isFav;
+                          });
+                          print(fav);
+                          if (fav) {
+                            songs.fav(user.users[0].email, song.id);
+                          } else {
+                            songs.refav(
+                                user.users[0].email, song.id, fav);
+                          }
+                        }
+                            : null,
                         color: Color(0xFFFFBE76),
                         iconColor: Color(0xFFFFFFFF),
                       ),

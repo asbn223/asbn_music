@@ -8,23 +8,7 @@ import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
-class SongsList extends StatefulWidget {
-  //Navigate to the selected routes
-  @override
-  _SongsListState createState() => _SongsListState();
-}
-
-class _SongsListState extends State<SongsList> {
-  @override
-  void initState() {
-    super.initState();
-    fetchFav();
-  }
-
-  void fetchFav() async {
-    await Provider.of<Songs>(context, listen: false).fetchFav();
-  }
-
+class SongsList extends StatelessWidget {
   void routeToNowPlaying(BuildContext context, String id) {
     Navigator.push(
       context,

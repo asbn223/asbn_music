@@ -24,6 +24,7 @@ class Songs with ChangeNotifier {
   //Getting songs from the storage of phone
   static FlutterAudioQuery audioQuery = FlutterAudioQuery();
   var rng = new Random();
+
   Future<List<Song>> getSongs() async {
     List<Song> _gotSongs = [];
     int id = 1;
@@ -109,28 +110,42 @@ class Songs with ChangeNotifier {
   }
 
   Future<void> fetchFav() async {
-    if (favSong.isNotEmpty) {
+    if (favSong.length > 0) {
       return;
-    }
-    String email = Users.email;
-    final fav =
-        await firestoreInstance.collection('Favourites').document(email).get();
-    List<dynamic> favS = fav.data['songId'];
-    for (int i = 0; i < favS.length; i++) {
-      favSong.add(favS[i]);
-      int index = _songs.indexWhere((sng) => sng.id == favS[i].toString());
-      Song song = Song(
-        id: _songs[index].id,
-        songName: _songs[index].songName,
-        songFile: _songs[index].songFile,
-        artist: _songs[index].artist,
-        album: _songs[index].album,
-        imgFile: _songs[index].imgFile,
-        duration: _songs[index].duration,
-        isFav: true,
-      );
-      _songs[index] = song;
-      notifyListeners();
+    } else {
+      String email = Users.email;
+      try {
+        final fav = await firestoreInstance
+            .collection('Favourites')
+            .document(email)
+            .get();
+        if (fav == null) {
+          return;
+        } else {
+          List<dynamic> favS = fav.data['songId'];
+          for (int i = 0; i < favS.length; i++) {
+            favSong.add(favS[i]);
+            int index =
+                _songs.indexWhere((sng) => sng.id == favS[i].toString());
+            Song song = Song(
+              id: _songs[index].id,
+              songName: _songs[index].songName,
+              songFile: _songs[index].songFile,
+              artist: _songs[index].artist,
+              album: _songs[index].album,
+              imgFile: _songs[index].imgFile,
+              duration: _songs[index].duration,
+              isFav: true,
+            );
+            _songs[index] = song;
+
+            notifyListeners();
+          }
+          print(favSong);
+        }
+      } catch (error) {
+        throw (error);
+      }
     }
   }
 }

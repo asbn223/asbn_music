@@ -106,8 +106,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkLogin() async {
     isLoggedIn = await Provider.of<Users>(context, listen: false).autoLogin();
-    await Provider.of<Settings>(context, listen: false).fetchDarkMode();
-    await Provider.of<Users>(context, listen: false).fetchUserData();
+    Provider.of<Settings>(context, listen: false).fetchDarkMode();
+    Provider.of<Users>(context, listen: false).fetchUserData();
   }
 
   @override
