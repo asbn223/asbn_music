@@ -3,12 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
+import 'package:musicplayer/provider/setting_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:provider/provider.dart';
 
-class SongsList extends StatelessWidget {
+class SongsList extends StatefulWidget {
   //Navigate to the selected routes
+  @override
+  _SongsListState createState() => _SongsListState();
+}
+
+class _SongsListState extends State<SongsList> {
+  @override
+  void initState() {
+    super.initState();
+    fetchFav();
+  }
+
+  void fetchFav() async {
+    await Provider.of<Songs>(context, listen: false).fetchFav();
+  }
+
   void routeToNowPlaying(BuildContext context, String id) {
     Navigator.push(
       context,
@@ -26,6 +42,7 @@ class SongsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final song = Provider.of<Song>(context, listen: false);
+    final settings = Provider.of<Settings>(context);
 //    final songs = Provider.of<Songs>(context, listen: false);
     return GestureDetector(
       onTap: () {
@@ -87,6 +104,7 @@ class SongsList extends StatelessWidget {
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25),
                   ),
+                  color: settings.isDarkMode ? Colors.black : Colors.white38,
                 ),
                 child: Column(
                   children: <Widget>[

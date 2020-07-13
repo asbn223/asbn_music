@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                   children: <Widget>[
                     label("Appearence"),
                     ListTile(
-                      title: Text("Disable Dark Mode"),
+                      title: Text("Light Mode"),
                       trailing: Container(
                         height: 100,
                         width: 75,

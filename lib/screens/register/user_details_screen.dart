@@ -21,8 +21,6 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
-
-
   String dropdownValue = 'Reading';
   String dropdownValue2;
   File _filePicked;
@@ -100,10 +98,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                               ),
                       ),
                       FlatButton.icon(
-//                        onPressed: () => _onImageButtonPressed(
-//                          ImageSource.gallery,
-//                          context: context,
-//                        ),
                         onPressed: () => openExplorer(),
                         icon: Icon(FontAwesomeIcons.image),
                         label: Text("Pick an Image"),

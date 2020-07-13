@@ -61,8 +61,8 @@ class HomeApp extends StatelessWidget {
           darkTheme: ThemeData.dark().copyWith(
             appBarTheme: AppBarTheme(color: Colors.black),
             textTheme: TextTheme(
-              body1: TextStyle(color: Colors.black),
               caption: TextStyle(color: Colors.white),
+              bodyText2: TextStyle(color: Colors.white),
             ),
             accentColor: Color(0xFFFAB1A0),
           ),
@@ -107,6 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkLogin() async {
     isLoggedIn = await Provider.of<Users>(context, listen: false).autoLogin();
     await Provider.of<Settings>(context, listen: false).fetchDarkMode();
+    await Provider.of<Users>(context, listen: false).fetchUserData();
   }
 
   @override

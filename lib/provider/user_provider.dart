@@ -8,11 +8,10 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
-  final String id, name, password, email, imgFile;
+  final String name, password, email, imgFile;
   final List<String> hobbies;
 
   User({
-    @required this.id,
     @required this.name,
     @required this.email,
     @required this.password,
@@ -24,12 +23,12 @@ class User with ChangeNotifier {
 class Users with ChangeNotifier {
   final firestoreInstance = Firestore.instance;
   final _auth = FirebaseAuth.instance;
-  String email;
+  static String email;
 
-  List<User> _user = [];
+  List<User> users = [];
 
   List<User> get user {
-    return [..._user];
+    return [...users];
   }
 
   //Creating user for the music app
@@ -61,7 +60,7 @@ class Users with ChangeNotifier {
           email: email,
           password: password,
         );
-        _user.add(user);
+        users.add(user);
         return registerUser;
       } else {
         return null;
@@ -75,7 +74,7 @@ class Users with ChangeNotifier {
   Future<void> fetchUserData() async {
     var userData;
     try {
-      if (_user.isNotEmpty) {
+      if (users.isNotEmpty) {
         return;
       }
       final currentUser = await _auth.currentUser();
@@ -99,7 +98,7 @@ class Users with ChangeNotifier {
               imgFile: userData.documents[i]['password'],
               hobbies: hobbies,
             );
-            _user.add(user);
+            users.add(user);
           }
         }
       } else {
@@ -118,7 +117,7 @@ class Users with ChangeNotifier {
               imgFile: userData.documents[i]['imgFile'],
               hobbies: hobbies,
             );
-            _user.add(user);
+            users.add(user);
           }
         }
       }
@@ -148,7 +147,7 @@ class Users with ChangeNotifier {
   Future<void> logout() async {
     await _auth.signOut();
 
-    _user.clear();
+    users.clear();
     Playlists.clearPlaylist();
 
     //Clear Data in Shared Preferencs value
@@ -167,5 +166,36 @@ class Users with ChangeNotifier {
     email = extractedDate['email'];
     notifyListeners();
     return true;
+  }
+
+  Future<void> updateProfile({
+    String password,
+    String updatedName,
+    List<String> updatedHobbies,
+    String updatedImgFile,
+  }) async {
+    final userData = await firestoreInstance.collection('Users').getDocuments();
+    userData.documents.forEach((element) {
+      if (element['email'] == email) {
+        int index = users.indexWhere((user) => user.email == email);
+        User user = User(
+          name: updatedName,
+          email: email,
+          password: password,
+          imgFile: updatedImgFile,
+          hobbies: updatedHobbies,
+        );
+        users[index] = user;
+        firestoreInstance
+            .collection('Users')
+            .document(element.documentID)
+            .updateData({
+          'name': updatedName,
+          'imgFile': updatedImgFile,
+          'hobbies': updatedHobbies,
+        });
+      }
+    });
+    notifyListeners();
   }
 }

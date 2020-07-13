@@ -19,10 +19,6 @@ class SongListScreen extends StatelessWidget {
         value: playlist,
         child: SongListBody(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.shuffle),
-        onPressed: () {},
-      ),
     );
   }
 }

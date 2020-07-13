@@ -1,12 +1,25 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musicplayer/provider/user_provider.dart';
+import 'package:musicplayer/widgets/rounded_button.dart';
+import 'package:musicplayer/widgets/textfield_container.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   static String routeName = 'profile_screen';
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String name, dropdownValue, dropdownValue2;
+
+  File _filePicked;
+  File _imagePicked;
 
   Map<String, IconData> _listHobbies = {
     'Reading': FontAwesomeIcons.book,
@@ -17,6 +30,18 @@ class ProfileScreen extends StatelessWidget {
     'Dancing': FontAwesomeIcons.signLanguage,
     'Photography': FontAwesomeIcons.camera,
   };
+
+  void openExplorer() async {
+    try {
+      _filePicked = await FilePicker.getFile(type: FileType.image);
+      setState(() {
+        _imagePicked = _filePicked;
+      });
+      print(_imagePicked);
+    } catch (error) {
+      throw (error);
+    }
+  }
 
   Widget _buildRowContainer({IconData icon, String label}) {
     return Container(
@@ -78,17 +103,181 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  Future<Widget> _showSheet(BuildContext context, Size size, Users users) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: size.height,
+          child: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  height: 270,
+                  width: double.infinity,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            style: BorderStyle.solid,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: _imagePicked == null
+                            ? Image.file(
+                                File(users.user[0].imgFile),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                _imagePicked,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                      FlatButton.icon(
+                        onPressed: () => openExplorer(),
+                        icon: Icon(FontAwesomeIcons.image),
+                        label: Text("Pick an Image"),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldContainer(
+                    margin: 10,
+                    icon: Icons.tag_faces,
+                    text: 'Your Name',
+                    onChanged: (value) {
+                      name = value;
+                    },
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Choose Your Hobbies"),
+                      DropdownButton<String>(
+                        value: dropdownValue == null
+                            ? users.user[0].hobbies[0]
+                            : dropdownValue,
+                        icon: Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        underline: Container(
+                          height: 3,
+                          color: Colors.black,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownValue = newValue;
+                          });
+                        },
+                        items: <String>[
+                          'Reading',
+                          'Travelling',
+                          'Collecting',
+                          'Listen to Music',
+                          'Playing Games',
+                          'Dancing',
+                          'Photography',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("Choose Your Hobbies"),
+                      DropdownButton<String>(
+                        value: dropdownValue2 == null
+                            ? users.user[0].hobbies[1]
+                            : dropdownValue2,
+                        icon: Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        underline: Container(
+                          height: 3,
+                          color: Colors.black,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownValue2 = newValue;
+                          });
+                        },
+                        items: <String>[
+                          'Reading',
+                          'Travelling',
+                          'Collecting',
+                          'Listen to Music',
+                          'Playing Games',
+                          'Dancing',
+                          'Photography',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                RoundedButton(
+                  color: Colors.red,
+                  text: "Update",
+                  textColor: Colors.white,
+                  press: () => users.updateProfile(
+                    password: users.user[0].password,
+                    updatedName: name,
+                    updatedImgFile: _imagePicked.path.toString(),
+                    updatedHobbies: [dropdownValue, dropdownValue2],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Users>(context, listen: false);
+    final user = Provider.of<Users>(context);
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            Image.file(
-              File(user.user[0].imgFile),
-              fit: BoxFit.cover,
+            Consumer<Users>(
+              builder: (BuildContext context, Users value, _) {
+                return Image.file(
+                  File(value.user[0].imgFile),
+                  fit: BoxFit.cover,
+                );
+              },
             ),
             Positioned(
               top: 0,
@@ -103,52 +292,61 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  height: MediaQuery.of(context).size.height * 0.58,
-                  width: double.infinity,
-                  child: ListView(
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text(
-                        user.user[0].name,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                      Container(
+                        padding: EdgeInsets.all(20.0),
+                        height: MediaQuery.of(context).size.height * 0.58,
+                        width: double.infinity,
+                        child: ListView(
+                          children: <Widget>[
+                            Text(
+                              user.user[0].name,
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "Interest",
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                _buildRowContainer(
+                                    icon: _listHobbies[user.user[0].hobbies[0]],
+                                    label: user.user[0].hobbies[0]),
+                                _buildRowContainer(
+                                    icon: _listHobbies[user.user[0].hobbies[1]],
+                                    label: user.user[0].hobbies[1]),
+                              ],
+                            ),
+                            _buildInfoList(
+                                FontAwesomeIcons.mailBulk, user.user[0].email),
+                            profileButton(
+                              label: "Edit Your Profile",
+                              icon: FontAwesomeIcons.userEdit,
+                              onPressed: () {
+                                _showSheet(context, size, user);
+                              },
+                            ),
+                          ],
                         ),
-                      ),
-                      Text(
-                        "Interest",
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          _buildRowContainer(
-                              icon: _listHobbies[user.user[0].hobbies[0]],
-                              label: user.user[0].hobbies[0]),
-                          _buildRowContainer(
-                              icon: _listHobbies[user.user[0].hobbies[1]],
-                              label: user.user[0].hobbies[1]),
-                        ],
-                      ),
-                      _buildInfoList(
-                          FontAwesomeIcons.mailBulk, user.user[0].email),
-                      profileButton(
-                        label: "Edit Your Profile",
-                        icon: FontAwesomeIcons.userEdit,
-                        onPressed: () {},
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ],
         ),

@@ -1,13 +1,17 @@
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:musicplayer/models/song.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 
 class Songs with ChangeNotifier {
   List<Song> _songs = [];
   List<Song> _shuffledSongs = [];
+  List<String> favSong = [];
+  final firestoreInstance = Firestore.instance;
 
   List<Song> get songs {
     return [..._songs];
@@ -50,7 +54,7 @@ class Songs with ChangeNotifier {
   }
 
   //Shuffle the songs
-  Future<void> shuffleSongs() {
+  void shuffleSongs() {
     var random = Random();
     _shuffledSongs.clear();
 
@@ -76,5 +80,57 @@ class Songs with ChangeNotifier {
   //Resuming currently paused song
   static void resumeSong() {
     audioPlayer.resume();
+  }
+
+  //Update Favourite for particular user
+  Future<void> fav(String email, String songId) async {
+    if (!favSong.contains(songId)) {
+      favSong.add(songId);
+    }
+
+    await firestoreInstance
+        .collection('Favourites')
+        .document(email)
+        .setData({'songId': favSong});
+  }
+
+  //Update Favourite for particular user
+  Future<void> refav(String email, String songId, bool isFav) async {
+    if (!isFav && favSong.contains(songId)) {
+      favSong.remove(songId);
+    }
+
+    await firestoreInstance
+        .collection('Favourites')
+        .document(email)
+        .updateData({
+      'songId': favSong,
+    });
+  }
+
+  Future<void> fetchFav() async {
+    if (favSong.isNotEmpty) {
+      return;
+    }
+    String email = Users.email;
+    final fav =
+        await firestoreInstance.collection('Favourites').document(email).get();
+    List<dynamic> favS = fav.data['songId'];
+    for (int i = 0; i < favS.length; i++) {
+      favSong.add(favS[i]);
+      int index = _songs.indexWhere((sng) => sng.id == favS[i].toString());
+      Song song = Song(
+        id: _songs[index].id,
+        songName: _songs[index].songName,
+        songFile: _songs[index].songFile,
+        artist: _songs[index].artist,
+        album: _songs[index].album,
+        imgFile: _songs[index].imgFile,
+        duration: _songs[index].duration,
+        isFav: true,
+      );
+      _songs[index] = song;
+      notifyListeners();
+    }
   }
 }

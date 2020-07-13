@@ -5,6 +5,7 @@ import 'package:flutter_media_notification/flutter_media_notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/widgets/clay_button.dart';
@@ -13,7 +14,6 @@ import 'package:neuomorphic_container/neuomorphic_container.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
 
 class NowPlayingScreen extends StatefulWidget {
   static String routeName = '/now_playing_screen';
@@ -27,12 +27,14 @@ class NowPlayingScreen extends StatefulWidget {
 
 class _NowPlayingScreenState extends State<NowPlayingScreen> {
   bool isPlaylistOpened = false;
-  final CountdownController countdownController = CountdownController();
+  CountdownController countdownController;
   String status = 'hidden';
 
   @override
   void initState() {
     super.initState();
+
+    countdownController = CountdownController();
 
     //Set Notification to Pause and song will be paused
     MediaNotification.setListener('pause', () {
@@ -187,10 +189,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    Songs songs = Provider.of<Songs>(context, listen: false);
+    final user = Provider.of<Users>(context, listen: false);
+    Songs songs = Provider.of<Songs>(context);
     Song song = songs.songs.firstWhere((music) => music.id == widget.songId);
     int songIndex = songs.songs.indexOf(song);
-    String songDuration = song.duration;
+    bool fav = song.isFav;
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -234,7 +237,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         child: Countdown(
                           controller: countdownController,
                           seconds: parseToSeconds(
-                            int.parse(songDuration),
+                            int.parse(song.duration),
                           ),
                           build: (context, double time) {
                             return Text(time.toString());
@@ -373,8 +376,22 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       curve: Curves.easeInOut,
                       duration: Duration(milliseconds: 750),
                       child: ClayButton(
-                        icon: Icons.favorite_border,
-                        onPressed: isPlaylistOpened ? null : null,
+                        icon: fav ? Icons.favorite : Icons.favorite_border,
+                        onPressed: isPlaylistOpened
+                            ? () {
+                                song.toggleFav();
+                                setState(() {
+                                  fav = song.isFav;
+                                });
+                                print(fav);
+                                if (fav) {
+                                  songs.fav(user.users[0].email, song.id);
+                                } else {
+                                  songs.refav(
+                                      user.users[0].email, song.id, fav);
+                                }
+                              }
+                            : null,
                         color: Color(0xFFFFBE76),
                         iconColor: Color(0xFFFFFFFF),
                       ),
