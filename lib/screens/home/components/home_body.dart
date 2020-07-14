@@ -31,6 +31,7 @@ class _HomeBodyState extends State<HomeBody> {
     }
   }
 
+  //Fetch and set the favourite song data
   void fetchFav() async {
     await Provider.of<Songs>(context, listen: false).fetchFav();
   }

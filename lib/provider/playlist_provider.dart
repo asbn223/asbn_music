@@ -105,10 +105,9 @@ class Playlists with ChangeNotifier {
           );
         });
         _playlists = pl;
-        print(_playlists.length);
-        return _playlists;
       }
     }
+    return _playlists;
   }
 
   //Deleting the playlist

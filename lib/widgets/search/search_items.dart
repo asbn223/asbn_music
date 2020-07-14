@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/widgets/search/search_result.dart';
 import 'package:musicplayer/widgets/search/search_suggestions.dart';
 import 'package:provider/provider.dart';
 
 class SearchItems extends SearchDelegate<String> {
-
-
   @override
   List<Widget> buildActions(BuildContext context) {
 //Actions for the app bar
@@ -35,8 +34,14 @@ class SearchItems extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+    final songData = Provider.of<Songs>(context, listen: false).songs;
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (context, index) => ChangeNotifierProvider.value(
+        value: songData[index],
+        child: SearchResult(query),
+      ),
+    );
   }
 
   @override

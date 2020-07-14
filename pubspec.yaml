@@ -45,6 +45,8 @@ dependencies:
   audioplayers: ^0.15.1
   flutter_media_notification: ^1.2.6
   timer_count_down: ^1.0.4
+  flutter_visualizers: ^0.0.2
+  diagonal: ^1.0.1
 
   #For getting dir
   path: ^1.6.0

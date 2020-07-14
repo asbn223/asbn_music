@@ -25,6 +25,7 @@ class Songs with ChangeNotifier {
   static FlutterAudioQuery audioQuery = FlutterAudioQuery();
   var rng = new Random();
 
+  //Fetches the data of the songs from the storage
   Future<List<Song>> getSongs() async {
     List<Song> _gotSongs = [];
     int id = 1;
@@ -95,7 +96,7 @@ class Songs with ChangeNotifier {
         .setData({'songId': favSong});
   }
 
-  //Update Favourite for particular user
+  //Remove Favourite for particular user
   Future<void> refav(String email, String songId, bool isFav) async {
     if (!isFav && favSong.contains(songId)) {
       favSong.remove(songId);
@@ -109,6 +110,7 @@ class Songs with ChangeNotifier {
     });
   }
 
+  //Fetch the favourites set by the particular User
   Future<void> fetchFav() async {
     if (favSong.length > 0) {
       return;

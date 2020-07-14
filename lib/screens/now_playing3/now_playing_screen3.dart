@@ -7,7 +7,6 @@ import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/add_in_playlist/add_in_screen.dart';
-import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
 import 'package:musicplayer/screens/shuffled_songs/shuffled_songs_screen.dart';
 import 'package:musicplayer/widgets/clay_button.dart';
 import 'package:musicplayer/widgets/custom_drawer.dart';
