@@ -20,7 +20,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Users>(context, listen: false);
+    final user = Provider.of<Users>(context);
     return ListView(
       children: <Widget>[
         UserAccountsDrawerHeader(
@@ -63,7 +63,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           color: Colors.red,
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FavScreen(),),
+            MaterialPageRoute(
+              builder: (context) => FavScreen(),
+            ),
           ),
         ),
         Divider(

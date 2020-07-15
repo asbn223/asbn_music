@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:musicplayer/provider/user_provider.dart';
+import 'package:musicplayer/screens/login/login_screen.dart';
 import 'package:musicplayer/widgets/rounded_button.dart';
 import 'package:musicplayer/widgets/textfield_container.dart';
 import 'package:provider/provider.dart';
@@ -103,6 +104,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showDialog(BuildContext context, {String message}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        });
+  }
+
   Future<Widget> _showSheet(BuildContext context, Size size, Users users) {
     return showModalBottomSheet(
       context: context,
@@ -134,9 +152,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         child: _imagePicked == null
-                            ? Image.file(
-                                File(users.user[0].imgFile),
-                                fit: BoxFit.cover,
+                            ? Center(
+                                child: Text("No Image Selected"),
                               )
                             : Image.file(
                                 _imagePicked,
@@ -169,9 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       Text("Choose Your Hobbies"),
                       DropdownButton<String>(
-                        value: dropdownValue == null
-                            ? users.user[0].hobbies[0]
-                            : dropdownValue,
+                        value: dropdownValue,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
@@ -209,9 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       Text("Choose Your Hobbies"),
                       DropdownButton<String>(
-                        value: dropdownValue2 == null
-                            ? users.user[0].hobbies[1]
-                            : dropdownValue2,
+                        value: dropdownValue2,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
@@ -243,15 +256,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 RoundedButton(
-                  color: Colors.red,
+                  color: Colors.blue,
                   text: "Update",
                   textColor: Colors.white,
-                  press: () => users.updateProfile(
-                    password: users.user[0].password,
-                    updatedName: name,
-                    updatedImgFile: _imagePicked.path.toString(),
-                    updatedHobbies: [dropdownValue, dropdownValue2],
-                  ),
+                  press: () {
+                    if(_imagePicked!=null){
+                      if (name != null) {
+                        if (dropdownValue != null && dropdownValue2 != null) {
+                          users.updateProfile(
+                            password: users.user[0].password,
+                            updatedName: name,
+                            updatedImgFile: _imagePicked.path.toString(),
+                            updatedHobbies: [dropdownValue, dropdownValue2],
+                          );
+                          Navigator.of(context).pop();
+                        } else {
+                          _showDialog(context,
+                              message: "Hobbies should not be empty");
+                        }
+                      } else {
+                        _showDialog(context, message: "Name should not be empty");
+                      }
+                    }else {
+                      _showDialog(context, message: "Pick an Image");
+                    }
+
+                  },
+                ),
+                RoundedButton(
+                  color: Colors.red,
+                  text: "Cancel",
+                  textColor: Colors.white,
+                  press: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
@@ -295,6 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+                color: Colors.black45,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -338,6 +375,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               icon: FontAwesomeIcons.userEdit,
                               onPressed: () {
                                 _showSheet(context, size, user);
+                              },
+                            ),
+                            profileButton(
+                              label: "Delete Your Profile",
+                              icon: FontAwesomeIcons.userEdit,
+                              onPressed: () {
+                                user.deleteUser(
+                                  email: user.users[0].email,
+                                  password: user.users[0].password,
+                                );
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  LoginScreen.routeName,
+                                );
                               },
                             ),
                           ],

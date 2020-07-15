@@ -59,6 +59,8 @@ class Users with ChangeNotifier {
           name: name,
           email: email,
           password: password,
+          imgFile: imgFile,
+          hobbies: hobbies,
         );
         users.add(user);
         return registerUser;
@@ -95,7 +97,7 @@ class Users with ChangeNotifier {
               name: userData.documents[i]['name'],
               email: userData.documents[i]['email'],
               password: userData.documents[i]['password'],
-              imgFile: userData.documents[i]['password'],
+              imgFile: userData.documents[i]['imgFile'],
               hobbies: hobbies,
             );
             users.add(user);
@@ -197,5 +199,29 @@ class Users with ChangeNotifier {
       }
     });
     notifyListeners();
+  }
+
+  Future<void> deleteUser({String email, String password}) async {
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      user.user.delete();
+      final userData =
+          await firestoreInstance.collection('Users').getDocuments();
+      userData.documents.forEach((element) {
+        if (element['email'] == email) {
+          print(element.documentID);
+          int index = users.indexWhere((user) => user.email == email);
+          users.removeAt(index);
+          firestoreInstance
+              .collection('Users')
+              .document(element.documentID)
+              .delete();
+        }
+        logout();
+      });
+    } catch (error) {
+      throw (error);
+    }
   }
 }

@@ -28,6 +28,30 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  void _showDialog(BuildContext context, Playlists playlists, String email) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Confirmation"),
+            content: Text("Do you really want to delete all the playlists?"),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  playlists.deleteAllPlaylist(email: email);
+                  Navigator.of(context).pop();
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
@@ -69,8 +93,11 @@ class SettingsScreen extends StatelessWidget {
                     label("Playlist"),
                     ListTile(
                       title: Text("Delete All Playlist"),
-                      onTap: () => playlists.deleteAllPlaylist(
-                          email: user.user[0].email),
+                      onTap: () => _showDialog(
+                        context,
+                        playlists,
+                        user.users[0].email,
+                      ),
                     ),
                     Divider(
                       thickness: 1.5,

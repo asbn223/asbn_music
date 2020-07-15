@@ -7,6 +7,31 @@ import 'package:musicplayer/screens/song_list/song_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlaylistBody extends StatelessWidget {
+  void _showDialog(BuildContext context, String playlistId, String email) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Confirmation"),
+            content: Text("Do you really want to delete this playlists?"),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Cancel"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Provider.of<Playlists>(context, listen: false)
+                      .deletePlayList(email: email, playlistId: playlistId);
+                  Navigator.of(context).pop();
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final playlist = Provider.of<Playlist>(context, listen: false);
@@ -26,8 +51,7 @@ class PlaylistBody extends StatelessWidget {
         alignment: Alignment.centerRight,
       ),
       onDismissed: (direction) {
-        Provider.of<Playlists>(context, listen: false).deletePlayList(
-            email: user[0].email, playlistId: playlist.playlistId);
+        _showDialog(context, playlist.playlistId, user[0].email);
       },
       child: GestureDetector(
         onTap: () => Navigator.push(
