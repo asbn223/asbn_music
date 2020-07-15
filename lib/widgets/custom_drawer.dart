@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/all_songs/all_songs_screen.dart';
+import 'package:musicplayer/screens/favourites/fav_screen.dart';
 import 'package:musicplayer/screens/home/home_screen.dart';
 import 'package:musicplayer/screens/login/login_screen.dart';
 import 'package:musicplayer/screens/playlist/playlist_screen.dart';
@@ -60,7 +61,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
           title: "Favourites",
           icon: Icons.favorite,
           color: Colors.red,
-          onTap: () => null,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FavScreen(),),
+          ),
         ),
         Divider(
           color: Color(0xFF808080),

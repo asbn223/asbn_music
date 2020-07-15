@@ -5,6 +5,7 @@ import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
+import 'package:musicplayer/screens/now_playing2/now_playing_screen2.dart';
 import 'package:provider/provider.dart';
 
 class PlayQueuePlaylist extends StatefulWidget {
@@ -55,7 +56,7 @@ class _PlayQueuePlaylistState extends State<PlayQueuePlaylist> {
               onTap: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) {
-                  return NowPlayingScreen(
+                  return NowPlayingScreen2(
                     songId: song.id,
                   );
                 }));

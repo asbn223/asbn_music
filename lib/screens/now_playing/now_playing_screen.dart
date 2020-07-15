@@ -510,7 +510,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 top: 15,
                 child: ClayButton(
                   icon: Icons.chevron_left,
-                  onPressed: () => Navigator.pop(context, widget.songId),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ),
               Positioned(
