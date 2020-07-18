@@ -137,8 +137,17 @@ class Playlists with ChangeNotifier {
   Future<void> deleteAllPlaylist({String email}) async {
     var plist = _playlists;
     try {
+//      print(email);
       clearPlaylist();
-      await firestoreInstance.collection("Playlists").document(email).delete();
+      var data =
+          await firestoreInstance.collection("Playlists").document(email);
+      if (data.documentID == email) {
+        data.collection("Playlists").getDocuments().then((value) {
+          for (DocumentSnapshot doc in value.documents) {
+            doc.reference.delete();
+          }
+        });
+      }
       plist = null;
     } catch (error) {
       _playlists = plist;

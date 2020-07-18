@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
+import 'package:musicplayer/provider/user_provider.dart';
 import 'package:musicplayer/screens/home/components/songs_list.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class _HomeBodyState extends State<HomeBody> {
       setState(() {
         isLoading = true;
       });
+      fetchUser();
       Provider.of<Songs>(context, listen: false).getSongs().then(
         (value) {
           setState(() {
@@ -34,6 +36,15 @@ class _HomeBodyState extends State<HomeBody> {
   //Fetch and set the favourite song data
   void fetchFav() async {
     await Provider.of<Songs>(context, listen: false).fetchFav();
+  }
+
+  void fetchUser() async {
+    await Provider.of<Users>(context, listen: false).fetchUserData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

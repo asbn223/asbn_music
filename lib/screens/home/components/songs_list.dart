@@ -108,7 +108,7 @@ class SongsList extends StatelessWidget {
                       style: GoogleFonts.getFont(
                         'Parisienne',
                         fontSize: 11,
-                        color: Color(0xFF8080800),
+                        color: settings.isDarkMode ? Colors.white : Colors.grey,
                       ),
                       overflow: TextOverflow.fade,
                       maxLines: 1,

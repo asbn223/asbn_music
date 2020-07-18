@@ -82,6 +82,7 @@ class Users with ChangeNotifier {
       final currentUser = await _auth.currentUser();
       print(currentUser.email);
       if (currentUser == null) {
+        print("Sabin");
         final prefs = await SharedPreferences.getInstance();
         final extractedDate =
             json.decode(prefs.getString('userData')) as Map<String, Object>;
@@ -104,8 +105,10 @@ class Users with ChangeNotifier {
           }
         }
       } else {
+        print("xxxx");
         userData = await firestoreInstance.collection('Users').getDocuments();
         for (int i = 0; i < userData.documents.length; i++) {
+          print(userData.documents[i]['name']);
           if (userData.documents[i]['email'] == currentUser.email) {
             List<dynamic> val = userData.documents[i]['hobbies'];
             List<String> hobbies = [];

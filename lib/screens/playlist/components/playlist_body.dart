@@ -102,7 +102,6 @@ class PlaylistBody extends StatelessWidget {
                       style: GoogleFonts.getFont(
                         'Berkshire Swash',
                         fontSize: 25,
-                        color: Colors.black,
                       ),
                     ),
                     Text(
