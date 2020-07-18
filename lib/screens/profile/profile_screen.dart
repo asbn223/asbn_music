@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -260,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   text: "Update",
                   textColor: Colors.white,
                   press: () {
-                    if(_imagePicked!=null){
+                    if (_imagePicked != null) {
                       if (name != null) {
                         if (dropdownValue != null && dropdownValue2 != null) {
                           users.updateProfile(
@@ -275,12 +276,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               message: "Hobbies should not be empty");
                         }
                       } else {
-                        _showDialog(context, message: "Name should not be empty");
+                        _showDialog(context,
+                            message: "Name should not be empty");
                       }
-                    }else {
+                    } else {
                       _showDialog(context, message: "Pick an Image");
                     }
-
                   },
                 ),
                 RoundedButton(
@@ -380,15 +381,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             profileButton(
                               label: "Delete Your Profile",
                               icon: FontAwesomeIcons.userEdit,
-                              onPressed: () {
-                                user.deleteUser(
-                                  email: user.user[0].email,
-                                  password: user.user[0].password,
-                                );
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  LoginScreen.routeName,
-                                );
+                              onPressed: () async {
+                                var connectionResult =
+                                    await (Connectivity().checkConnectivity());
+                                //Check if user is connected with internet
+                                if (connectionResult ==
+                                        ConnectivityResult.wifi ||
+                                    connectionResult ==
+                                        ConnectivityResult.mobile) {
+                                  user.deleteUser(
+                                    email: user.user[0].email,
+                                    password: user.user[0].password,
+                                  );
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    LoginScreen.routeName,
+                                  );
+                                }
                               },
                             ),
                           ],
