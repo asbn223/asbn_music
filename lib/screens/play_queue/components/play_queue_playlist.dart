@@ -4,7 +4,6 @@ import 'package:musicplayer/models/song.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
 import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:musicplayer/provider/user_provider.dart';
-import 'package:musicplayer/screens/now_playing/now_playing_screen.dart';
 import 'package:musicplayer/screens/now_playing2/now_playing_screen2.dart';
 import 'package:provider/provider.dart';
 
@@ -47,9 +46,9 @@ class _PlayQueuePlaylistState extends State<PlayQueuePlaylist> {
                   });
                   print(fav);
                   if (fav) {
-                    songq.fav(user.users[0].email, song.id);
+                    songq.fav(user.user[0].email, song.id);
                   } else {
-                    songq.refav(user.users[0].email, song.id, fav);
+                    songq.refav(user.user[0].email, song.id, fav);
                   }
                 },
               ),

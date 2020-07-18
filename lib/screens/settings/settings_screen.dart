@@ -96,7 +96,7 @@ class SettingsScreen extends StatelessWidget {
                       onTap: () => _showDialog(
                         context,
                         playlists,
-                        user.users[0].email,
+                        user.user[0].email,
                       ),
                     ),
                     Divider(

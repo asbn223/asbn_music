@@ -85,9 +85,9 @@ class _SongListBodyState extends State<SongListBody> {
                         });
                         print(fav);
                         if (fav) {
-                          songq.fav(user.users[0].email, song.id);
+                          songq.fav(user.user[0].email, song.id);
                         } else {
-                          songq.refav(user.users[0].email, song.id, fav);
+                          songq.refav(user.user[0].email, song.id, fav);
                         }
                       },
                     ),

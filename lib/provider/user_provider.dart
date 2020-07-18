@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/provider/playlist_provider.dart';
+import 'package:musicplayer/provider/songs_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
@@ -25,7 +26,7 @@ class Users with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   static String email;
 
-  List<User> users = [];
+  static List<User> users = [];
 
   List<User> get user {
     return [...users];
@@ -80,9 +81,7 @@ class Users with ChangeNotifier {
         return;
       }
       final currentUser = await _auth.currentUser();
-      print(currentUser.email);
       if (currentUser == null) {
-        print("Sabin");
         final prefs = await SharedPreferences.getInstance();
         final extractedDate =
             json.decode(prefs.getString('userData')) as Map<String, Object>;
@@ -105,10 +104,8 @@ class Users with ChangeNotifier {
           }
         }
       } else {
-        print("xxxx");
         userData = await firestoreInstance.collection('Users').getDocuments();
         for (int i = 0; i < userData.documents.length; i++) {
-          print(userData.documents[i]['name']);
           if (userData.documents[i]['email'] == currentUser.email) {
             List<dynamic> val = userData.documents[i]['hobbies'];
             List<String> hobbies = [];
@@ -153,6 +150,7 @@ class Users with ChangeNotifier {
     await _auth.signOut();
 
     users.clear();
+    Songs.clearFav();
     Playlists.clearPlaylist();
 
     //Clear Data in Shared Preferencs value

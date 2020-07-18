@@ -10,7 +10,7 @@ import 'package:musicplayer/provider/user_provider.dart';
 class Songs with ChangeNotifier {
   List<Song> _songs = [];
   List<Song> _shuffledSongs = [];
-  List<String> favSong = [];
+  static List<String> favSong = [];
   final firestoreInstance = Firestore.instance;
 
   List<Song> get songs {
@@ -115,7 +115,7 @@ class Songs with ChangeNotifier {
     if (favSong.length > 0) {
       return;
     } else {
-      String email = Users.email;
+      String email = Users.users[0].email;
       try {
         final fav = await firestoreInstance
             .collection('Favourites')
@@ -143,11 +143,14 @@ class Songs with ChangeNotifier {
 
             notifyListeners();
           }
-          print(favSong);
         }
       } catch (error) {
         throw (error);
       }
     }
+  }
+
+  static void clearFav() {
+    favSong.clear();
   }
 }

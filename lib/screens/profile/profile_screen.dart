@@ -382,8 +382,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               icon: FontAwesomeIcons.userEdit,
                               onPressed: () {
                                 user.deleteUser(
-                                  email: user.users[0].email,
-                                  password: user.users[0].password,
+                                  email: user.user[0].email,
+                                  password: user.user[0].password,
                                 );
                                 Navigator.pushReplacementNamed(
                                   context,

@@ -385,10 +385,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                                 });
                                 print(fav);
                                 if (fav) {
-                                  songs.fav(user.users[0].email, song.id);
+                                  songs.fav(user.user[0].email, song.id);
                                 } else {
                                   songs.refav(
-                                      user.users[0].email, song.id, fav);
+                                      user.user[0].email, song.id, fav);
                                 }
                               }
                             : null,
